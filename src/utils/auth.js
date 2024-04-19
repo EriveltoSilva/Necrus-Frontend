@@ -4,22 +4,24 @@ import jwt_decode from 'jwt-decode'
 import {useAuthStore} from '../store/auth' 
 
 
-export const login = (email, password)=>{
+export const login = async (email, password)=>{
     try {
-        const {data, status} = axios.post("user/token/", {
+        const {data, status} = await axios.post("user/token/", {
             email,
-            password
+            password,
         })
         if(status===200){
             setAuthUser(data.access, data.refresh)
-
             //Alert -Sign In Success
         }
-        return {data, erro:null};
+        return {data, error:null};
 
     } catch (error) {
         console.log(error);
-        return {data:null, error:error.response.data?.detail || "Algo deu errado recuperando os dados de login"}
+        return {
+            data:null, 
+            error:error.response.data?.detail || "Algo deu errado recuperando os dados de login"
+        };
     }
 }
 
