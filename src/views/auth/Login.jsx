@@ -53,6 +53,7 @@ function Login() {
         <br />
         <button type="submit">Entrar</button>
       </form>
+      <Link to={'/forgot-password'}>Esqueceu a senha</Link>
     </div>
   )
 }
