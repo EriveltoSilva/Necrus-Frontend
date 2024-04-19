@@ -4,11 +4,11 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuthStore } from '../../store/auth'
 
 function Login() {
-  const navigate = useNavigate()
   const [email, setEmail] = useState("eriveltoclenio@gmail.com")
   const [password, setPassword] = useState("erivelto@123")
+  
+  const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
-
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
   useEffect(() => {

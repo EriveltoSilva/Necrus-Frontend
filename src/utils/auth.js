@@ -37,13 +37,19 @@ export const register = async (full_name, email, phone, password, confirmation_p
             confirmation_password
         })
         
-        await login(email, password)
+        //await login(email, password)
         
         //Alert - Register Success
-        return {data, error:null}
+        return {
+            data, 
+            error:null
+        };
     } catch (error) {
         console.log(error);
-        return {data:null, error:error.response.data?.detail || "Algo deu errado fazendo o registro dos dados do user"}
+        return {
+            data:null, 
+            error:error.response.data?.detail || "Algo deu errado fazendo o registro dos dados do user"
+        };
     }
 }
 
