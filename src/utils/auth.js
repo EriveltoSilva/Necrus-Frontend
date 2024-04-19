@@ -37,7 +37,7 @@ export const register = async (full_name, email, phone, password, confirmation_p
             confirmation_password
         })
         
-        //await login(email, password)
+        await login(email, password)
         
         //Alert - Register Success
         return {
