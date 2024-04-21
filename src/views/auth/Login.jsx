@@ -64,32 +64,35 @@ function Login() {
       <br />
       <br />
 
-      <div class="flex flex-column-reverse flex-wrap font-bold align-items-center">
-        <div class="flex align-items-center justify-content-center w-4rem h-4rem bg-primary  border-round m-2">1</div>
-        <div class="flex align-items-center justify-content-center w-4rem h-4rem bg-primary  border-round m-2">2</div>
-        <div class="flex align-items-center justify-content-center w-4rem h-4rem bg-primary  border-round m-2">3</div>
+      <div className="flex flex-column-reverse flex-wrap font-bold align-items-center">
+        <div className="flex align-items-center justify-content-center w-4rem h-4rem bg-primary  border-round m-2">1</div>
+        <div className="flex align-items-center justify-content-center w-4rem h-4rem bg-primary  border-round m-2">2</div>
+        <div className="flex align-items-center justify-content-center w-4rem h-4rem bg-primary  border-round m-2">3</div>
       </div>
+
       <br />
       <br />
+
       <div className="block bg-primary font-bold text-center p-4  mb-5">1</div>
       <div className="block bg-primary font-bold text-center p-4 border-round mb-5">2</div>
       <div className="block bg-primary font-bold text-center p-4 border-round mt-5">3</div>
+
       <br />
       <br />
-      <div class="card-container">
-        <div class="inline-block w-4rem h-4rem bg-primary font-bold text-center p-4 border-round">1</div>
-        <div class="inline-block w-4rem h-4rem bg-primary font-bold text-center p-4 border-round mx-4">2</div>
-        <div class="inline-block w-4rem h-4rem bg-primary font-bold text-center p-4 border-round">3</div>
+
+      <div className="card-container">
+        <div className="inline-block w-4rem h-4rem bg-primary font-bold text-center p-4 border-round">1</div>
+        <div className="inline-block w-4rem h-4rem bg-primary font-bold text-center p-4 border-round mx-4">2</div>
+        <div className="inline-block w-4rem h-4rem bg-primary font-bold text-center p-4 border-round">3</div>
       </div>
+
       <br />
       <br />
-      <div class="inline-flex">
-    <div class="hidden md:block bg-primary font-bold align-items-center justify-content-center p-4 border-round mr-3">Hide on a small screen</div>
-    <div class="block md:hidden bg-danger font-bold align-items-center justify-content-center p-4 border-round mr-3">Visible on a small screen</div>
-</div>
 
-
-
+      <div className="inline-flex">
+        <div className="hidden md:block bg-primary font-bold align-items-center justify-content-center p-4 border-round mr-3">Hide on a small screen</div>
+        <div className="block md:hidden bg-danger font-bold align-items-center justify-content-center p-4 border-round mr-3">Visible on a small screen</div>
+      </div>
 
     </div>
   )
