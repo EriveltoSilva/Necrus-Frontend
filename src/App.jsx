@@ -1,4 +1,5 @@
 import React from "react";
+import Topbar from "./base/Topbar";
 import Header from "./base/Header";
 import Footer from "./base/Footer";
 import Login from "./views/auth/Login";
@@ -17,6 +18,7 @@ import 'primeflex/primeflex.css';
 function App() {
     return (
         <BrowserRouter>
+            <Topbar />
             <Header />
             <Routes>
                 <Route path="/" element={<Dashboard />} />
