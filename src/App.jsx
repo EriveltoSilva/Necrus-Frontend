@@ -3,13 +3,15 @@ import Login from "./views/auth/Login";
 import Logout from "./views/auth/Logout";
 import Register from "./views/auth/Register";
 import Dashboard from "./views/auth/Dashboard";
-import { Routes, Route, BrowserRouter} from 'react-router-dom'
 import ForgotPassword from "./views/auth/ForgotPassword";
 import CreatePassword from "./views/auth/CreatePassword";
-
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import "primereact/resources/themes/lara-light-cyan/theme.css";
+import 'primeicons/primeicons.css';
+import 'primeflex/primeflex.css';
 
 function App() {
-    return(
+    return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Dashboard />} />
@@ -20,6 +22,7 @@ function App() {
                 <Route path="/create-new-password" element={< CreatePassword />} />
             </Routes>
         </BrowserRouter>
+
     )
 }
 

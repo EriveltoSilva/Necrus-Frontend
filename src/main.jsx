@@ -1,14 +1,18 @@
 import React, { Fragment } from 'react';
-import ReactDOM   from 'react-dom/client'; //Não desestruturar o ReactDOM
-
+import ReactDOM from 'react-dom/client'; //Não desestruturar o ReactDOM
 import App from './App'
+import { PrimeReactProvider } from 'primereact/api';
 
 ReactDOM.createRoot(document.querySelector("#root")).render(
     <React.StrictMode>
-        <App />  
+        <PrimeReactProvider>
+            <App />
+        </PrimeReactProvider>
     </React.StrictMode>
-    
+
     // <Fragment>
-    //     <App /> 
+    //     <PrimeReactProvider>
+    //         <App />
+    //     </PrimeReactProvider>
     // </Fragment>
 )
