@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from 'react'
-import { Dropdown } from 'primereact/dropdown';
-import { Link, useNavigate } from 'react-router-dom';
-import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { URL_ROUTE_ROOT } from '../utils/constants'
+import { Dropdown } from 'primereact/dropdown';
+import { URL_ROUTES } from '../utils/constants';
 import ImageLogo from '../components/ImageLogo';
+import { InputText } from 'primereact/inputtext';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Topbar() {
-    const [searchValue, setSearchValue] = useState("")
-    const menuOptions = [
-        {"title":"Login", "url":"/login"},
-        {"title":"Logout", "url":"/logout"},
-        {"title":"Registrar", "url":"/register"},
-    ]
-    const [menuOption, setMenuOption]=useState(null)
-
     const navigate = useNavigate()
-    
-    useEffect(()=>{
+
+    const menuOptions = [
+        { "title": "Login", "url": URL_ROUTES.ROOT },
+        { "title": "Logout", "url": URL_ROUTES.LOGOUT },
+        { "title": "Registrar", "url": URL_ROUTES.REGISTER },
+    ]
+
+    const [searchValue, setSearchValue] = useState("")
+    const [menuOption, setMenuOption] = useState(null)
+
+    useEffect(() => {
         console.log(menuOption);
         if (menuOption !== null)
             navigate(menuOption.url)
@@ -28,8 +29,6 @@ function Topbar() {
         console.log(searchValue);
         // Função de procura
     }
-
-    
 
     return (
         <div className="w-full ">
@@ -50,7 +49,7 @@ function Topbar() {
 
             <div className="hidden lg:flex grid align-items-center bg-light py-3 xl:px-5 mx-1">
                 <div className="col-12 md:col-3 ">
-                    <Link to={URL_ROUTE_ROOT} className="text-decoration-none">
+                    <Link to={URL_ROUTES.ROOT} className="text-decoration-none">
                         <ImageLogo />
                     </Link>
                 </div>
@@ -63,16 +62,14 @@ function Topbar() {
                                 onChange={(e) => setSearchValue(e.target.value)}
                                 icon="pi pi-search"
                                 placeholder="Procure por produtos aqui..."
-                                className='w-10'
-                            />
+                                className='w-10'/>
 
                             <Button
                                 icon="pi pi-search"
                                 severity="primary"
                                 aria-label="Search"
                                 type='submit'
-                                className='ml-1 btn-primary'
-                            />
+                                className='ml-1 btn-primary'/>
                         </div>
                     </form>
                 </div>
