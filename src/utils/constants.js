@@ -5,4 +5,5 @@ export const URL_ROUTES = {
     "LOGOUT":'/logout',
     "REGISTER":'/register',
     "FORGOT_PASSWORD":'/forgot-password',
+    "TERMS_AND_PRIVACY":'/terms/privacy',
 }

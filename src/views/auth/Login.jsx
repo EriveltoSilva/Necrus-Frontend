@@ -1,16 +1,16 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+
 import { login } from '../../utils/auth';
 import { useAuthStore } from '../../store/auth';
-import React, { useState, useEffect } from 'react';
-import { URL_ROUTES } from '../../utils/constants';
-import { useNavigate, Link } from 'react-router-dom';
 
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
+
+import { URL_ROUTES } from '../../utils/constants';
 import ImageLogo from '../../components/ImageLogo';
+import '../../assets/css/auth.css'
 
-import '../../assets/css/login.css'
-
-// text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary
 
 function Login() {
   const [email, setEmail] = useState("eriveltoclenio@gmail.com")
@@ -21,9 +21,8 @@ function Login() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
   useEffect(() => {
-    if (isLoggedIn()) {
-      navigate('/')
-    }
+    if (isLoggedIn())
+      navigate(URL_ROUTES.ROOT)
   })
 
   const resetForm = () => {
@@ -41,20 +40,15 @@ function Login() {
       console.log(error);
     }
     else {
-      // console.log(data);
-      navigate('/')
+      navigate(URL_ROUTES.ROOT)
       resetForm()
     }
     setIsLoading(false)
   }
 
-  const [date, setDate] = useState()
-
   return (
     <>
-      <main id='login'>
-
-
+      <main id='auth'>
         <div className="w-8 mx-auto">
           <div className="grid align-items-center justify-content-center  px-4 sm:px-0">
             <div className="col sm:col-6 lg:col-7 xl:col-6 text-dark">
@@ -67,16 +61,9 @@ function Login() {
                 <p>Acesse a sua conta</p>
               </div>
 
-              <button className="btn btn-lg btn-outline-primary w-full mb-3 border-round">
-                <i className="pi pi-google text-danger mx-2 fs-6"></i>
-                Login com o Google
-              </button>
-              <button className="btn btn-lg btn-outline-primary w-100 border-round">
-                <i className="pi pi-facebook text-primary mx-2 fs-6 "></i>
-                Login com o Facebook
-              </button>
-
-
+              <Button label='Login com o Google' icon="pi pi-google" className="btn btn-lg btn-outline-primary w-full mb-3 border-round" />
+              <Button label='Login com o Facebook' icon="pi pi-facebook" className="btn btn-lg btn-outline-primary w-full mb-3 border-round" />
+                
               <div className="relative">
                 <hr className="text-secondary divider" />
                 <div className="divider-content-center">Ou</div>
@@ -118,25 +105,6 @@ function Login() {
           </div>
         </div>
       </main>
-
-
-
-      {/* 
-      <h1>Faça o seu Login</h1>
-      <form onSubmit={handleLogin}>
-        <input type="email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-
-        <br />
-        <br />
-        <input type="password" name="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-
-        <br />
-        <button type="submit">Entrar</button>
-      </form>
-      <Link to={'/forgot-password'}>Esqueceu a senha</Link> 
-      */}
-
-
     </>
   )
 }
