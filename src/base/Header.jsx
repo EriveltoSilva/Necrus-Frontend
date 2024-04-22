@@ -4,6 +4,8 @@ import ImageLogo from '../components/ImageLogo';
 import React from 'react'
 import MyMenuBar from '../components/bug/MyMenuBar';
 import styles from '../assets/Header.module.css'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 
 function Header() {
 
@@ -43,26 +45,25 @@ function Header() {
                             <div className={`${styles['collapse']}  ${styles['navbar-collapse']} ${styles['justify-content-between']}`} id="navbarCollapse">
                                 <div className={`${styles['navbar-nav']}  ${styles['mr-auto']} ${styles['py-0']} `}>
                                     <Link to={"/"} className={`${styles['nav-item']} ${styles['nav-link']} active`}>Home</Link>
-                                    <Link to={""} className={`${styles['nav-item']} ${styles['nav-link']}`}>Novos Produtos</Link>
-                                    <Link to={""} className={`${styles['nav-item']} ${styles['nav-link']}`}>Destaques</Link>
-                                    <Link to={""} className={`${styles['nav-item']} ${styles['nav-link']}`}>Contactos</Link>
+                                    <Link to={"/products"} className={`${styles['nav-item']} ${styles['nav-link']}`}>Novos Produtos</Link>
+                                    <Link to={"/highlights"} className={`${styles['nav-item']} ${styles['nav-link']}`}>Destaques</Link>
+                                    <Link to={"/contacts"} className={`${styles['nav-item']} ${styles['nav-link']}`}>Contactos</Link>
                                     <div className={`${styles['nav-item']}  ${styles['dropdown']}`}>
-                                        <Link to={""} className={`${styles['nav-link']}  ${styles['dropdown-toggle']}`} data-toggle="dropdown">Outras Secções
+                                        <span  className={`${styles['nav-link']}  ${styles['dropdown-toggle']}`} data-toggle="dropdown">Outras Secções
                                             <i className={`pi pi-chevron-down ${styles['mt-1']} ${styles['mr-5']}`}></i>
-                                        </Link>
+                                        </span>
                                         <div className={`${styles['dropdown-menu']}  ${styles['bg-primary']} ${styles['rounded-0']} ${styles['border-0']} ${styles['border-0']} ${styles['m-0']}`}>
-                                            <Link href={""} className={`${styles['dropdown-item']}`}>Sobre nós</Link>
-                                            <Link href={""} className={`${styles['dropdown-item']}`}>Faqs</Link>
+                                            <Link href={"/about-us"} className={`${styles['dropdown-item']}`}>Sobre nós</Link>
+                                            <Link href={"/faqs"} className={`${styles['dropdown-item']}`}>Faqs</Link>
                                         </div>
                                     </div>
                                 </div>
                                 <div className={`${styles['navbar-nav']}  ${styles['ml-auto']} ${styles['py-0']} ${styles['d-none']} ${styles['d-lg-block']} `}>
-                                    <Link to={""} className={`${styles['btn']} ${styles['px-0']}`}>
+                                    <Link to={"/wishlist"} className={`${styles['btn']} ${styles['px-0']}`}>
                                         <i className={`pi pi-heart-fill ${styles['text-primary']}`}></i>
-
                                         <span className={`${styles['badge']}  ${styles['text-secondary']} ${styles['border']} ${styles['border-secondary']} ${styles['rounded-circle']} `} style={{paddingBottom: "2px"}}>0</span>
                                     </Link>
-                                    <Link href={""} className={`${styles['btn']}  ${styles['px-0']} ${styles['ml-3']}`}>
+                                    <Link to={"/cart"} className={`${styles['btn']}  ${styles['px-0']} ${styles['ml-3']}`}>
                                         <i className={`pi pi-shopping-cart ${styles['text-primary']}`}></i>
                                         <span className={`${styles['badge']}  ${styles['text-secondary']} ${styles['border']} ${styles['border-secondary']} ${styles['rounded-circle']} `} style={{paddingBottom: "2px"}}>99</span>
                                     </Link>
@@ -70,8 +71,6 @@ function Header() {
                             </div>
                         </nav>
                     </div>
-
-
                 </div>
             </div>
 
