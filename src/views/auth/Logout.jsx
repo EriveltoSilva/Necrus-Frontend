@@ -1,21 +1,21 @@
 import React, {useEffect} from 'react'
+import { Link, useNavigate } from 'react-router-dom';
+
 import { logout } from '../../utils/auth'
-import { Link } from 'react-router-dom'
+import { URL_ROUTES } from '../../utils/constants';
 
 function Logout() {
+  const navigate = useNavigate()
+
     useEffect(()=>{
         logout()
+        navigate(URL_ROUTES.ROOT)
     }, [])
+
   return (
-    <div>
-        <h1>Logout</h1>
-        <Link to={'/'}> Home</Link>
-        <br />
-        <Link to={'/login'}> Ir para Login</Link>
-        <br />
-        <br />
-        <Link to={'/register'}>Criar Conta</Link>
-    </div>
+    <>
+    <h1>Logout - Não é Suposto veres esta página</h1>
+    </>
   )
 }
 
