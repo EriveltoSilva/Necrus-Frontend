@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import React, { useState, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 
 import apiInstance from '../../utils/axios'
@@ -11,29 +11,29 @@ import { URL_ROUTES } from '../../utils/constants'
 import ImageLogo from '../../components/ImageLogo'
 
 function ForgotPassword() {
-    const [email, setEmail] = useState("")
-    const navigate = useNavigate()
-    const toastAlert = useRef(null)
+  const [email, setEmail] = useState("")
+  const navigate = useNavigate()
+  const toastAlert = useRef(null)
 
-    const resetForm = ()=>{
-        setEmail("")
-    }
+  const resetForm = () => {
+    setEmail("")
+  }
 
-    const emailHandler = (e) => {
-        e.preventDefault()
-        apiInstance.get(`user/password-reset/${email}/`)
-        .then((resp) => {
-            toastAlert.current.show({severity:'success', summary:'Recuperação de Senha!', detail:"Foi enviado um email de recuperação de palavra-passe para si!"})
-            resetForm()
-        }).catch((error)=>{
-            toastAlert.current.show({severity:'error', summary:'Recuperação de Senha!', detail:"Este E-mail não existe no sistema!"})
-            console.error(error)
-        })
-    }
-  
-  
-    return (
-        <>
+  const emailHandler = (e) => {
+    e.preventDefault()
+    apiInstance.get(`user/password-reset/${email}/`)
+      .then((resp) => {
+        toastAlert.current.show({ severity: 'success', summary: 'Recuperação de Senha!', detail: "Foi enviado um email de recuperação de palavra-passe para si!" })
+        resetForm()
+      }).catch((error) => {
+        toastAlert.current.show({ severity: 'error', summary: 'Recuperação de Senha!', detail: "Este E-mail não existe no sistema!" })
+        console.error(error)
+      })
+  }
+
+
+  return (
+    <>
       <main id='auth'>
         <Toast ref={toastAlert} />
         <div className="w-8 mx-auto">
@@ -48,12 +48,9 @@ function ForgotPassword() {
                 <p>Mantenha a sua conta segura</p>
               </div>
 
-              {/* <Button label='Login com o Google' icon="pi pi-google" className="btn btn-lg btn-outline-primary w-full mb-3 border-round" />
-              <Button label='Login com o Facebook' icon="pi pi-facebook" className="btn btn-lg btn-outline-primary w-full mb-3 border-round" /> */}
-                
               <div className="relative">
                 <hr className="text-secondary divider" />
-                <div className="divider-content-center"></div>
+                <div className="divider-content-center">*</div>
               </div>
 
 
@@ -65,7 +62,7 @@ function ForgotPassword() {
                   </span>
                   <InputText type='email' name='email' value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email da Conta" />
                 </div>
-                
+
                 <div className="p-inputgroup mb-3 flex justify-content-end">
                   <div>
                     <Link to={URL_ROUTES.FORGOT_PASSWORD}>Esqueceu a senha?</Link>
@@ -86,7 +83,7 @@ function ForgotPassword() {
         </div>
       </main>
     </>
-    
+
   )
 }
 
