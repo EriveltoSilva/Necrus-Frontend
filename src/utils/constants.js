@@ -4,4 +4,5 @@ export const URL_ROUTES = {
     "LOGIN":'/login',
     "LOGOUT":'/logout',
     "REGISTER":'/register',
+    "FORGOT_PASSWORD":'/forgot-password',
 }

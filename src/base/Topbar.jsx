@@ -10,7 +10,8 @@ function Topbar() {
     const navigate = useNavigate()
 
     const menuOptions = [
-        { "title": "Login", "url": URL_ROUTES.ROOT },
+        { "title": "Inicio", "url": URL_ROUTES.ROOT },
+        { "title": "Login", "url": URL_ROUTES.LOGIN },
         { "title": "Logout", "url": URL_ROUTES.LOGOUT },
         { "title": "Registrar", "url": URL_ROUTES.REGISTER },
     ]
