@@ -84,7 +84,7 @@ function Footer() {
         </div>
 
 
-        <div className="grid border-top xl:mx-5 py-4" style={{ borderColor: "rgba(256, 256, 256, .1) !important;" }}>
+        <div className="grid border-top xl:mx-5 py-4" style={{ borderColor: "rgba(256, 256, 256, .1) !important" }}>
           <div className="md:col-6 xl:px-0">
             <p className="md:mb-0 text-center md:text-left text-secondary">
               &copy; <Link className="my-text-primary" to={"#"}>www.necrus.com</Link>. Todos os direitos reservados
