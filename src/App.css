@@ -891,7 +891,7 @@ button.bg-dark:focus {
     text-align: center !important;
 }
 
-.text-primary {
+.text-primary, .my-text-primary {
     color: var(--primary) !important;
 }
 

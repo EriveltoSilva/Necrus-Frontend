@@ -46,7 +46,7 @@ function Topbar() {
             </div>
             */}
 
-            <div className="hidden md:flex grid align-items-center bg-light py-3 xl:px-5 mx-1">
+            <div className="hidden lg:flex grid align-items-center bg-light py-3 xl:px-5 mx-1">
                 <div className="col-12 md:col-3 ">
                     <Link to={URL_ROUTE_ROOT} className="text-decoration-none">
                         <ImageLogo />

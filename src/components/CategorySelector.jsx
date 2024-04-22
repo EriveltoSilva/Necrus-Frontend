@@ -26,8 +26,8 @@ function CategorySelector() {
                 options={categories}
                 optionLabel="title"
                 placeholder="Categorias"
-                className="w-full  my-bg-primary "
-                // checkmark={true}
+                className="w-full  my-bg-primary h-100 flex border-noround "
+                // dropdownIcon="pi pi-list"
                 highlightOnSelect={false} 
                  />
         </>
