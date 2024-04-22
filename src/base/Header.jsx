@@ -4,8 +4,8 @@ import ImageLogo from '../components/ImageLogo';
 import MyMenuBar from '../components/bug/MyMenuBar';
 import CategorySelector from '../components/CategorySelector';
 
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "bootstrap/dist/js/bootstrap.bundle.min";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 
 
 function Header() {
