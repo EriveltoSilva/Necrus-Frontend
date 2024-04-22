@@ -12,6 +12,7 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import './App.css'
 
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import "primereact/resources/primereact.min.css";
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 

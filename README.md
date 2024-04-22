@@ -20,3 +20,9 @@ Concerto nº 5
 
 Mozart 
 Primeiro Movimento( Eine Kleine Nachit )
+
+
+# Mexendo no:
+Header.jsx
+CartIcon.jsx
+CategorySelector.jsx

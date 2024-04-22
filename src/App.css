@@ -95,7 +95,7 @@ h6, .h6 {
     font-weight: 500 !important;
 }
 
-.bg-primary {
+.bg-primary,.my-bg-primary  {
     background-color: var(--primary) !important;
 }
 

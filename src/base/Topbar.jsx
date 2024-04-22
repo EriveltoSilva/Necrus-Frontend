@@ -3,9 +3,8 @@ import { Dropdown } from 'primereact/dropdown';
 import { Link } from 'react-router-dom';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-
-import logo from '../assets/logo/logo.png'
 import {URL_ROUTE_ROOT} from '../utils/constants'
+import ImageLogo from '../components/ImageLogo';
 
 function Topbar() {
     const [searchValue, setSearchValue] = useState("")
@@ -47,10 +46,10 @@ function Topbar() {
             </div>
             */}
 
-            <div className="hidden md:flex grid align-items-center bg-light py-3 px-xl-5 ">
+            <div className="hidden md:flex grid align-items-center bg-light py-3 xl:px-5 mx-1">
                 <div className="col-12 md:col-3 ">
                     <Link to={URL_ROUTE_ROOT} className="text-decoration-none">
-                        <img src={logo} alt="Necrus logo" height="50" />
+                        <ImageLogo />
                     </Link>
                 </div>
 
