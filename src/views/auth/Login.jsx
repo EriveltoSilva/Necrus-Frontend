@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 import { login } from '../../utils/auth';
@@ -6,6 +6,7 @@ import { useAuthStore } from '../../store/auth';
 
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
+import { Toast } from 'primereact/toast';
 
 import { URL_ROUTES } from '../../utils/constants';
 import ImageLogo from '../../components/ImageLogo';
@@ -17,12 +18,16 @@ function Login() {
   const [password, setPassword] = useState("erivelto@123")
 
   const navigate = useNavigate()
+  const toastAlert = useRef(null)
+
   const [isLoading, setIsLoading] = useState(false)
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
   useEffect(() => {
     if (isLoggedIn())
+    {
       navigate(URL_ROUTES.ROOT)
+    }
   })
 
   const resetForm = () => {
@@ -36,10 +41,11 @@ function Login() {
 
     const { error } = await login(email, password)
     if (error) {
-      alert(error)
+      toastAlert.current.show({severity:'error', summary:'Login!', detail:"Credencias inválidas!"})
       console.log(error);
     }
     else {
+      toastAlert.current.show({severity:'success', summary:'Login!', detail:"Bem vindo de Volta!"})
       navigate(URL_ROUTES.ROOT)
       resetForm()
     }
@@ -49,6 +55,7 @@ function Login() {
   return (
     <>
       <main id='auth'>
+        <Toast ref={toastAlert} />
         <div className="w-8 mx-auto">
           <div className="grid align-items-center justify-content-center  px-4 sm:px-0">
             <div className="col sm:col-6 lg:col-7 xl:col-6 text-dark">

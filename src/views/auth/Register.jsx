@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 
 import { register } from '../../utils/auth'
@@ -7,9 +7,11 @@ import { useAuthStore } from '../../store/auth'
 
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
+import { Toast } from 'primereact/toast';
 
 import ImageLogo from '../../components/ImageLogo'
 import { URL_ROUTES } from '../../utils/constants'
+
 
 function Register() {
     const [fullName, setFullName] = useState("");
@@ -19,13 +21,16 @@ function Register() {
     const [confirmationPassword, setConfirmationPassword] = useState("");
 
     const navigate = useNavigate()
+    const toastAlert = useRef(null)
     const [isLoading, setIsLoading] = useState(false)
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
 
 
     useEffect(() => {
         if (isLoggedIn())
-            navigate(URL_ROUTES.ROOT);
+        {
+            setTimeout(()=>{navigate(URL_ROUTES.ROOT)}, 3000)
+        }
     }, [isLoading])
 
     const resetForm = () => {
@@ -43,12 +48,12 @@ function Register() {
         const { data, error } = await register(fullName, email, phone, password, confirmationPassword)
 
         if (error) {
-            alert(JSON.stringify(error))
             console.log(error);
+            toastAlert.current.show({severity:'error', summary:'Registro!', detail:"Ocorreu um erro ao registrar o usuário!"})
         }
         else {
-            resetForm()
-            navigate(URL_ROUTES.ROOT)
+            toastAlert.current.show({severity:'success', summary:'Registro!', detail:"Usuário registrado com Sucesso!"})
+            setTimeout(()=>{resetForm();navigate(URL_ROUTES.ROOT);}, 3000)
         }
 
         setIsLoading(false)
@@ -58,6 +63,7 @@ function Register() {
     return (
         <>
             <main id='auth'>
+            <Toast ref={toastAlert} />
                 <div className="w-8 mx-auto">
                     <div className="grid align-items-center justify-content-center  px-4 sm:px-0">
                         <div className="col sm:col-6 lg:col-7 xl:col-6 text-dark">
