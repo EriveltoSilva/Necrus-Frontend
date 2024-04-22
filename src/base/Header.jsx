@@ -4,15 +4,15 @@ import ImageLogo from '../components/ImageLogo';
 import MyMenuBar from '../components/bug/MyMenuBar';
 import CategorySelector from '../components/CategorySelector';
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/js/bootstrap.bundle.min";
 
 
 function Header() {
 
     return (
         <>
-            <div className="container-fluid bg-dark mb-3">
+            <header className="container-fluid bg-dark mb-3">
                 <div className="row px-xl-5">
                     <div className="col-lg-3 d-none d-lg-block text-center">
                         <CategorySelector />
@@ -56,7 +56,7 @@ function Header() {
                         </nav>
                     </div>
                 </div>
-            </div>
+            </header>
         </>
     )
 }
