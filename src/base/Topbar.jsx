@@ -20,14 +20,12 @@ function Topbar() {
     const [menuOption, setMenuOption] = useState(null)
 
     useEffect(() => {
-        console.log(menuOption);
         if (menuOption !== null)
             navigate(menuOption.url)
     }, [menuOption])
 
     const handleSearchForm = (e) => {
         e.preventDefault();
-        console.log(searchValue);
         // Função de procura
     }
 

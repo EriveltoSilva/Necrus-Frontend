@@ -14,7 +14,7 @@ function CategorySelector() {
     }, [])
 
     useEffect(() => {
-        console.log(category);
+        // console.log(category);
     }, [category])
 
 
