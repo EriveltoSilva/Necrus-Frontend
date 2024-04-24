@@ -5,16 +5,17 @@ import Footer from "./base/Footer";
 import Login from "./views/auth/Login";
 import Logout from "./views/auth/Logout";
 import Register from "./views/auth/Register";
-import Dashboard from "./views/auth/Dashboard";
+import Dashboard from "./views/store/Dashboard";
 import ForgotPassword from "./views/auth/ForgotPassword";
 import CreatePassword from "./views/auth/CreatePassword";
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
-import AboutUs from './views/store/AboutUs'
-import Contact from './views/store/Contact'
-import Faqs from './views/store/Faqs'
-import Highlight from './views/store/Highlight'
-import Products from './views/store/Products'
+import Faqs from './views/store/Faqs';
+import Home from "./views/store/Home";
+import AboutUs from './views/store/AboutUs';
+import Contact from './views/store/Contact';
+import Products from './views/store/Products';
+import Highlight from './views/store/Highlight';
 
 import './App.css'
 import "primereact/resources/themes/lara-light-cyan/theme.css";
@@ -28,6 +29,17 @@ function App() {
             <Topbar />
             <Header />
             <Routes>
+                {/* User Authentication  Components */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/logout" element={<Logout />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/create-new-password" element={< CreatePassword />} />
+
+
+                {/* Store Components */}
+                <Route path="/" element={<Home />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/contacts" element={<Contact />} />
@@ -37,14 +49,8 @@ function App() {
                 <Route path="/cart" element={<Highlight />} />
 
                 
-                
-                
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/logout" element={<Logout />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/create-new-password" element={< CreatePassword />} />
+
+
             </Routes>
             <Footer />
         </BrowserRouter>

@@ -16,7 +16,7 @@ function Dashboard() {
                 </div>
                 :
                 <div>
-                    <h1>Home Page</h1>
+                    <h1>Faça login primeiro para ver o Dashboard</h1>
                     <Link to={'/login'}> Ir para Login</Link>
                     <br />
                     <br />
