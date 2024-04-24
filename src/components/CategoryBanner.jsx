@@ -7,7 +7,7 @@ import { Image } from 'primereact/image';
 
 function CategoryBanner() {
 
-    const [categories, setCategories] = useState([])
+    const [categories, setCategories] = useState(null)
 
     useEffect(() => {
         apiInstance.get('categories/')

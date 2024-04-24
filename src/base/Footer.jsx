@@ -45,13 +45,13 @@ function Footer() {
                 <h5 className="text-secondary text-uppercase mb-4">Newsletter</h5>
                 <p>Assine a nossa newsletter para estar actualizado os produtos mais recentes</p>
                 <form onSubmit={handleRegisterForm} >
-                  <div className="input-group">
+                  <div className="">
                     <InputText
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       icon="pi pi-envelope"
                       placeholder="Seu endereço de email"
-                      className='w-10'
+                      className='sm:w-6 md:w-9 xl:w-10'
                     />
 
                     <Button

@@ -1,163 +1,248 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import apiInstance from '../../utils/axios';
 
+import { Toast } from 'primereact/toast';
+import { Button } from 'primereact/button';
+import { Column } from 'primereact/column';
+import { Galleria } from 'primereact/galleria';
+import { InputText } from 'primereact/inputtext';
+import { DataTable } from 'primereact/datatable';
+import { FloatLabel } from 'primereact/floatlabel';
+import { TabView, TabPanel } from 'primereact/tabview';
+import { InputTextarea } from 'primereact/inputtextarea';
+
 function ProductDetail() {
     const [product, setProduct] = useState({});
+    const [galleryImages, setGalleryImages] = useState([]);
+    const [sizes, setSizes] = useState([]);
+    const [colors, setColors] = useState([]);
+    const [specifications, setSpecifications] = useState([]);
+    const [reviews, setReviews] = useState([]);
+
+    const [email, setEmail] = useState("");
+    const [newUserReview, setNewUserReview] = useState("");
+
+    const [size, setSize] = useState("");
+    const [color, setColor] = useState("");
+    const [quantity, setQuantity] = useState(1);
+
+
     const params = useParams()
-    console.log();
+    const toastAlert = useRef(null)
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    const handlerForm = (e) => {
+        e.preventDefault();
+        toastAlert.current.show({ severity: 'success', summary: 'Formulario!', detail: "Dados a serem submetidos,quantidade:" + quantity })
+    }
+
+    const handleReviewForm = (e) => {
+        e.preventDefault();
+        toastAlert.current.show({ severity: 'error', summary: 'Avaliação!', detail: "Dados de avaliação a serem submetidos" })
+    }
 
     useEffect(() => {
         apiInstance.get(`products/detail/${params.slug}/`)
-            .then((resp) => { setProduct(resp.data); console.log(resp.data); })
+            .then((resp) => {
+                setProduct(resp.data);
+                setGalleryImages(resp.data?.gallery);
+                setSizes(resp.data?.size);
+                setColors(resp.data?.color);
+                setSpecifications(resp.data?.specification);
+                setReviews(resp.data?.review);
+            })
             .catch((error) => console.error(error))
     }, [])
 
+    const responsiveOptions = [
+        { breakpoint: '991px', numVisible: 4 },
+        { breakpoint: '767px', numVisible: 3 },
+        { breakpoint: '575px', numVisible: 1 }
+    ];
+
+    const itemTemplate = (item) => {
+        return <img src={item.image} alt={`Imagem ${item.gid}`} style={{ width: '100%', height: "500px" }} />
+    }
+
+    const thumbnailTemplate = (item) => {
+        return <img src={item.image} alt={item.gid} width="75" height="75" />
+    }
+
+
     return (
         <>
-            <div className="w-full pb-5">
+            <section className="w-full pb-5">
+                <Toast ref={toastAlert} />
                 <div className="grid xl:px-5">
-                    <div className="lg:col-5 mb-30">
-                        <div id="product-carousel" className="carousel slide" data-ride="carousel">
-                            <div className="carousel-inner bg-light">
-                                {
-                                    <div className="carousel-item">
-                                        <img className="w-full h-100" src={product?.image} alt={product.title} />
-                                    </div>
-                                }
-                            </div>
-
-                            <a className="carousel-control-prev" href="#product-carousel" data-slide="prev">
-                                <i className="pi pi-chevron-left text-dark"></i>
-                            </a>
-                            <a className="carousel-control-next" href="#product-carousel" data-slide="next">
-                                <i className="pi pi-chevron-right text-dark"></i>
-                            </a>
+                    <div className="sm:col-10 lg:col-5 sm:mb-8 sm:mx-auto">
+                        <div className='card'>
+                            <Galleria
+                                value={galleryImages}
+                                style={{ maxWidth: '640px', minHeight: "500px" }}
+                                responsiveOptions={responsiveOptions}
+                                item={itemTemplate}
+                                thumbnail={thumbnailTemplate}
+                                transitionInterval={3000}
+                                showItemNavigators
+                                numVisible={3}
+                                circular
+                                autoPlay
+                            />
                         </div>
                     </div>
 
-                    <div className="lg:col-7 h-auto mb-30">
-                        <div className="h-100 bg-light p-30">
-                            <h3>{product?.title}</h3>
+                    <div className="sm:col-12 lg:col-7 sm:mb-8">
+                        <article className="h-100 bg-light h-full p-8">
+                            <h2>{product?.title}</h2>
                             <div className="flex mb-3">
-                                <div className="text-primary mr-2">
-                                    <small className="pi pi-star-fill"></small>
-                                    <small className="pi pi-star-fill"></small>
-                                    <small className="pi pi-star-fill"></small>
-                                    <small className="pi pi-star-half"></small>
-                                    <small className="pi pi-star"></small>
+                                <div className="my-text-primary mr-2">
+                                    <span className="pi pi-star"></span>
+                                    <span className="pi pi-star"></span>
+                                    <span className="pi pi-star"></span>
+                                    <span className="pi pi-star"></span>
+                                    <span className="pi pi-star-half"></span>
                                 </div>
-                                <small className="pt-1">(99 visualizações)</small>
+                                <small className="pt-1">(99 Reviews)</small>
                             </div>
-                            <h3 className="font-weight-semi-bold mb-4">{product?.price}kz</h3>
+                            <h3 className="font-weight-semi-bold mb-4">{product?.price}Kz</h3>
                             <p className="mb-4">
-                                {product?.description}erivelto
+                                {product?.description}
                             </p>
 
                             <div className="flex mb-3">
                                 <strong className="text-dark mr-3">Tamanhos:</strong>
-                                {
-                                    <div className="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" className="custom-control-input" id={product?.size?.name} value={product?.size?.name} />
-                                        <label className="custom-control-label" for={product?.size?.name}>{product?.size?.name}</label>
+                                {sizes?.map((size, index) => (
+                                    <div key={size.id} className="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" className="custom-control-input" id={`size-${size.id}`} name="size" value={size.name} onClick={(e) => setSize(e.target.value)} />
+                                        <label className="custom-control-label" htmlFor={`size-${size.id}`}>{size.name}</label>
                                     </div>
+                                ))
                                 }
                             </div>
+
 
                             <div className="flex mb-4">
                                 <strong className="text-dark mr-3">Cores:</strong>
-                                {
-                                    <div className="custom-control custom-radio custom-control-inline">
-                                        <input type="radio" className="custom-control-input"  name="color" />
-                                        <label className="custom-control-label" for={product?.color?.name}>{product?.color?.name}</label>
+                                {colors?.map((color, index) => (
+                                    <div key={color.id} className="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" className="custom-control-input" id={`color-${color.id}`} name="color" value={color.name} onClick={(e) => setColor(e.target.value)} />
+                                        <label className="custom-control-label" htmlFor={`color-${color.id}`}>{color.name}</label>
                                     </div>
+                                ))
                                 }
                             </div>
 
-                            <div className="flex align-items-center mb-4 pt-2">
-                                <div className="input-group quantity mr-3" style={{ width: "130px" }}>
-                                    <div className="input-group-btn">
-                                        <button className="btn btn-primary btn-minus">
-                                            <i className="pi pi-dash"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" className="form-control bg-secondary border-0 text-center" value="1" />
-                                    <div className="input-group-btn">
-                                        <button className="btn btn-primary btn-plus">
-                                            <i className="pi pi-plus"></i>
-                                        </button>
-                                    </div>
+
+                            <div className="flex flex-wrap align-items-center mb-4 pt-2">
+
+                                <div>
+                                    <Button
+                                        icon="pi pi-minus"
+                                        severity="primary"
+                                        type='submit'
+                                        className='btn-primary px-4'
+                                        onClick={(e) => setQuantity((quantity) => { return ((--quantity < 1) ? 1 : quantity) })}
+                                    />
+
+                                    <Button label={quantity} severity="info" text disabled className='w-8rem' />
+
+                                    <Button
+                                        icon="pi pi-plus"
+                                        severity="primary"
+                                        type='submit'
+                                        className='btn-primary px-4 mr-5 mt-3'
+                                        onClick={(e) => setQuantity(quantity + 1)}
+                                    />
                                 </div>
-                                <button className="btn btn-primary px-3">
-                                    <i className="pi pi-shopping-cart mr-1"></i>
-                                    Adicionar ao Carrinho
-                                </button>
+
+                                <Button
+                                    icon="pi pi-shopping-cart"
+                                    label='Adicionar ao Carrinho'
+                                    severity="primary"
+                                    type='submit'
+                                    className='btn-primary px-3 mt-3'
+                                    onClick={handlerForm}
+                                />
                             </div>
+
+
                             <div className="flex pt-2">
                                 <strong className="text-dark mr-2">Partilhar no:</strong>
                                 <div className="inline-flex">
-                                    <Link className="text-dark px-2" to={""}>
+                                    <Link className="my-text-primary px-2" to={""}>
                                         <i className="pi pi-facebook"></i>
                                     </Link>
-                                    <Link className="text-dark px-2" to={""}>
+                                    <Link className="my-text-primary px-2" to={""}>
                                         <i className="pi pi-twitter"></i>
                                     </Link>
-                                    <Link className="text-dark px-2" to={""}>
+                                    <Link className="my-text-primary px-2" to={""}>
                                         <i className="pi pi-linkedin"></i>
-                                    </Link>
-                                    <Link className="text-dark px-2" to={""}>
-                                        <i className="pi pi-pinterest"></i>
                                     </Link>
                                 </div>
                             </div>
-                        </div>
+                        </article>
                     </div>
                 </div>
 
 
                 <div className="grid xl:px-5">
-                    <div className="col">
-                        <div className="bg-light p-30">
-                            <div className="nav nav-tabs mb-4">
-                                <a className="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Informações</a>
-                                <a className="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Avaliações (0)</a>
+                    <div className='col-12'>
+                        <div className="card">
+                            <div className="flex mb-2 gap-2 justify-content-end">
+                                <Button onClick={() => setActiveIndex(0)} className="w-2rem h-2rem p-0 border-circle" rounded outlined={activeIndex !== 0} label="1" />
+                                <Button onClick={() => setActiveIndex(1)} className="w-2rem h-2rem p-0 border-circle" rounded outlined={activeIndex !== 1} label="2" />
+                                <Button onClick={() => setActiveIndex(2)} className="w-2rem h-2rem p-0 border-circle" rounded outlined={activeIndex !== 2} label="3" />
                             </div>
-                            <div className="tab-content">
-                                <div className="tab-pane fade show active" id="tab-pane-1">
-                                    <h4 className="mb-3">Informações Adicionais</h4>
+                            <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
+                                <TabPanel header="Descrição">
+                                    <h3 className="mb-3">Descrição do Produto</h3>
                                     {product?.description}
-                                </div>
+                                </TabPanel>
 
-                                <div className="tab-pane fade" id="tab-pane-2">
+
+                                <TabPanel header="Especificações">
+                                    <h3 className="mb-3">Especificações do Produto</h3>
+                                    <div className="card">
+                                        <DataTable value={specifications} stripedRows tableStyle={{ minWidth: '50rem' }}>
+                                            <Column field="title" header="Caracteristica"></Column>
+                                            <Column field="content" header="Descrição"></Column>
+                                        </DataTable>
+                                    </div>
+                                </TabPanel>
+
+
+                                <TabPanel header="Avaliações (0) ">
                                     <div className="grid">
-                                        <div className="md:col-6">
-                                            <h4 className="mb-4">0 avaliação para a {product?.title}</h4>
+                                        <div className="col-12 md:col-6">
+                                            <h4 className="mb-4">1 avaliação para  "{product?.title}"</h4>
                                             {
-
-                                                <div className="media mb-4">
-                                                <img src={""} alt="Imagem" className="img-fluid mr-3 mt-1" style={{ width: "45px" }} />
-                                                <div className="media-body">
-                                                    <h6>Nome do Usuario<small> - <i>Data da classificação</i></small></h6>
-                                                    <div className="text-primary mb-2">
-                                                        <i className="pi pi-star-fill"></i>
-                                                        <i className="pi pi-star-fill"></i>
-                                                        <i className="pi pi-star-fill"></i>
-                                                        <i className="pi pi-star-half"></i>
-                                                        <i className="pi pi-star"></i>
+                                                reviews?.map((review, index) => (
+                                                    <div key={review.id} className="media mb-4">
+                                                        <img src={review?.user?.profile?.image} alt={`${review?.user?.full_name}`} className="w-full mr-3 mt-1" style={{ width: "45px" }} />
+                                                        <div className="media-body">
+                                                            <h6>{review?.user?.full_name}<small> - <i>{review?.created_at}</i></small></h6>
+                                                            <div className="text-primary mb-2">
+                                                                <i className="fas fa-star"></i>
+                                                                <i className="fas fa-star"></i>
+                                                                <i className="fas fa-star"></i>
+                                                                <i className="far fa-star"></i>
+                                                                <i className="fas fa-star-half"></i>
+                                                            </div>
+                                                            <p>{review?.review}</p>
+                                                        </div>
                                                     </div>
-                                                    <p>{product?.review?.review}</p>
-                                                </div>
-                                            </div>
+                                                ))
                                             }
-                                            {/* end loop reviews */}
                                         </div>
 
                                         <div className="md:col-6">
-                                            <h4 className="mb-4">Deixa o seu comentário</h4>
-                                            <div className="flex my-3">
-                                                <p className="mb-0 mr-2">Estrelas <span className="text-danger">*</span>:</p>
-                                                <div className="text-primary">
+                                            <h4>Já comprou este producto? Deixe a sua avaliação</h4>
+                                            <small>Seu endereço de email será mantido secreto.</small>
+                                            <div className="flex mt-3">
+                                                <p className="mr-2">Sua avaliação * :</p>
+                                                <div className="my-text-primary">
                                                     <i className="pi pi-star"></i>
                                                     <i className="pi pi-star"></i>
                                                     <i className="pi pi-star"></i>
@@ -165,26 +250,50 @@ function ProductDetail() {
                                                     <i className="pi pi-star"></i>
                                                 </div>
                                             </div>
-                                            <form method="post">
-                                                <div className="form-group">
-                                                    <label for="message">Avaliação <span className="text-danger">*</span></label>
-                                                    <textarea id="message" name="message" cols="30" rows="5" className="form-control" required readOnly={true}></textarea>
-                                                </div>
 
-                                                <div className="form-group mb-0">
-                                                    <input type="submit" value="Avaliar" className="btn btn-primary px-3" />
-                                                </div>
+                                            <form>
+                                                <FloatLabel className="mt-5">
+                                                    <InputText
+                                                        id='email'
+                                                        value={email}
+                                                        onChange={(e) => setEmail(e.target.value)}
+                                                        icon="pi pi-envelope"
+                                                        placeholder="Seu endereço de email"
+                                                        className='w-full'
+                                                    />
+                                                    <label htmlFor="email">E-mail</label>
+                                                </FloatLabel>
+
+                                                <FloatLabel className="mt-5">
+                                                    <InputTextarea
+                                                        id='review'
+                                                        value={newUserReview}
+                                                        onChange={(e) => setNewUserReview(e.target.value)}
+                                                        rows={5}
+                                                        className='w-full'
+                                                        cols={40}
+                                                    />
+                                                    <label htmlFor="review">Sua Avaliação</label>
+                                                </FloatLabel>
+
+                                                <Button
+                                                    icon="pi pi-star"
+                                                    label='Avaliar Produto'
+                                                    severity="primary"
+                                                    type='submit'
+                                                    className='btn-primary px-3 mt-3'
+                                                    onClick={handleReviewForm}
+                                                />
                                             </form>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                </TabPanel>
+                            </TabView>
                         </div>
                     </div>
+
                 </div>
-            </div>
-
-
+            </section>
 
         </>
     )
