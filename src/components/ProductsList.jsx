@@ -20,7 +20,7 @@ function ProductsList({ title, products }) {
                         products?.map((product, index) => (
                             <Card
                                 key={product.id}
-                                title={<Link className='my-text-primary '>{product.title} </Link>}
+                                title={<Link to={`/products/detail/${product.slug}/`} className='text-dark'>{product.title} </Link>}
                                 subTitle={product.category?.title}
                                 className="sm:w-15 md:w-15rem lg:w-20rem xl:w-25rem text-center border-round"
                                 header={<Image src={product.image} zoomSrc={product.image} alt={product.title} preview />}
@@ -40,7 +40,7 @@ function ProductsList({ title, products }) {
                                         <Button icon="pi pi-heart" aria-label="Carrinho" className='ml-1 btn-primary border-round' />
                                     </Link>
 
-                                    <Link to={""} title="Ver Detalhes">
+                                    <Link to={`/products/detail/${product.slug}/`} title="Ver Detalhes">
                                         <Button icon="pi pi-search" aria-label="Detalhes" className='ml-1 btn-primary  border-round' />
                                     </Link>
 

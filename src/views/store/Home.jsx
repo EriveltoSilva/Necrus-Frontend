@@ -35,7 +35,7 @@ function Home() {
                 <h1>Home</h1>
                 <FeaturedBanner />
                 <CategoryBanner />
-                <ProductsList title={"Os melhores produtos para si"} products={products} />
+                <ProductsList title="Os melhores produtos para si" products={products} />
             </main>
         </>
     )
