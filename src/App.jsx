@@ -47,16 +47,16 @@ function App() {
 
 
                 {/* Store Components */}
-                <Route path="/" element={<Home />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/about-us" element={<AboutUs />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/contacts" element={<Contact />} />
-                <Route path="/faqs" element={<Faqs />} />
-                <Route path="/highlights" element={<Highlight />} />
-                <Route path="/wishlist" element={<Highlight />} />
-                <Route path="/cart" element={<Highlight />} />
-                <Route path="/products/detail/:slug/" element={<ProductDetail />} />
+                <Route path={URL_ROUTES.ROOT} element={<Home />} />
+                <Route path={URL_ROUTES.DASHBOARD} element={<Dashboard />} />
+                <Route path={URL_ROUTES.ABOUT_US} element={<AboutUs />} />
+                <Route path={URL_ROUTES.PRODUCTS} element={<Products />} />
+                <Route path={URL_ROUTES.CONTACTS} element={<Contact />} />
+                <Route path={URL_ROUTES.Faqs} element={<Faqs />} />
+                <Route path={URL_ROUTES.HIGHLIGHTS} element={<Highlight />} />
+                <Route path={URL_ROUTES.WISHLIST} element={<Highlight />} />
+                <Route path={URL_ROUTES.GO_TO_CART} element={<Highlight />} />
+                <Route path={URL_ROUTES.PRODUCT_DETAIL} element={<ProductDetail />} />
 
                 
 
