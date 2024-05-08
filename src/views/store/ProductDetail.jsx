@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import apiInstance from '../../utils/axios';
+import GetCurrentAddress from '../../plugin/UserCountry';
+import UserData from '../../plugin/UserData';
+import CartID from '../../plugin/CartID';
 
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
@@ -33,8 +36,38 @@ function ProductDetail() {
     const toastAlert = useRef(null)
     const [activeIndex, setActiveIndex] = useState(0);
 
-    const handlerForm = (e) => {
+    /** UTILITIES FUNCTIONS */
+    const currentAddress = GetCurrentAddress()
+    const userData = UserData();
+    const cartId = CartID();
+
+    
+
+    const isFieldsValid = () => {
+        if (!color) {
+            toastAlert.current.show({ severity: 'error', summary: 'Formulario!', detail: "Escolha uma cor para o produto!" });
+            return false;
+        }
+        if (!size) {
+            toastAlert.current.show({ severity: 'error', summary: 'Formulario!', detail: "Escolha um tamanho para o produto!" });
+            return false;
+        }
+        return true;
+    }
+
+
+    const handlerAddtoCart = (e) => {
         e.preventDefault();
+        if(!isFieldsValid()) return;
+        console.log("-----------------------------------------------");
+        console.log("Product ID:", product.id);
+        console.log("PRICE:", product.price);
+        console.log("SIZE:", size);
+        console.log("QUANTITY:",quantity);
+        console.log("Country:", currentAddress);
+        console.log("USER ID",userData?.user_id);
+        console.log("CART ID:", cartId);
+        console.log("-----------------------------------------------");
         toastAlert.current.show({ severity: 'success', summary: 'Formulario!', detail: "Dados a serem submetidos,quantidade:" + quantity })
     }
 
@@ -55,6 +88,8 @@ function ProductDetail() {
             })
             .catch((error) => console.error(error))
     }, [])
+
+    // useEffect(()=> console.log(color, size, quantity), [color, size, quantity]);
 
     const responsiveOptions = [
         { breakpoint: '991px', numVisible: 4 },
@@ -163,7 +198,7 @@ function ProductDetail() {
                                     severity="primary"
                                     type='submit'
                                     className='btn-primary px-3 mt-3'
-                                    onClick={handlerForm}
+                                    onClick={handlerAddtoCart}
                                 />
                             </div>
 

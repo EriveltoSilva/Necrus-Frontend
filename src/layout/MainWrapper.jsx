@@ -1,6 +1,5 @@
 import React, {useEffect, useState } from 'react';
 import {setUser} from '../utils/auth'
-import React from 'react'
 
 const MainWrapper = ({ children }) => {
     const [loading, setLoading] = useState(true)
