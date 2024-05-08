@@ -41,8 +41,6 @@ function ProductDetail() {
     const userData = UserData();
     const cartId = CartID();
 
-    
-
     const isFieldsValid = () => {
         if (!color) {
             toastAlert.current.show({ severity: 'error', summary: 'Formulario!', detail: "Escolha uma cor para o produto!" });
@@ -55,20 +53,40 @@ function ProductDetail() {
         return true;
     }
 
-
-    const handlerAddtoCart = (e) => {
+    const handlerAddtoCart = async (e) => {
         e.preventDefault();
-        if(!isFieldsValid()) return;
-        console.log("-----------------------------------------------");
-        console.log("Product ID:", product.id);
-        console.log("PRICE:", product.price);
-        console.log("SIZE:", size);
-        console.log("QUANTITY:",quantity);
-        console.log("Country:", currentAddress);
-        console.log("USER ID",userData?.user_id);
-        console.log("CART ID:", cartId);
-        console.log("-----------------------------------------------");
-        toastAlert.current.show({ severity: 'success', summary: 'Formulario!', detail: "Dados a serem submetidos,quantidade:" + quantity })
+        if (!isFieldsValid()) return;
+        // console.log("-----------------------------------------------");
+        // console.log("Product ID:", product.id);
+        // console.log("PRICE:", product.price);
+        // console.log("shipping_amount:", product?.shipping_amount);
+        // console.log("SIZE:", size);
+        // console.log("COLOR:", color);
+        // console.log("QUANTITY:", quantity);
+        // console.log("Country:", currentAddress);
+        // console.log("USER ID", userData?.user_id);
+        // console.log("CART ID:", cartId);
+        // console.log("-----------------------------------------------");
+
+        try {
+            const formData = new FormData();
+            formData.append("product_id", product.id);
+            formData.append("price", product.price);
+            formData.append("shipping_amount", product?.shipping_amount);
+            formData.append("size", size);
+            formData.append("color", color);
+            formData.append("quantity", quantity);
+            
+            formData.append("country", currentAddress?.country.toUpperCase());
+            formData.append("user_id", userData?.user_id);
+            formData.append("cart_id", cartId);
+
+            const response = await apiInstance.post(`cart/`, formData);
+            console.log(response);
+            toastAlert.current.show({ severity: 'success', summary: 'Formulario!', detail: "Os dados foram submetidos!"});
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     const handleReviewForm = (e) => {
