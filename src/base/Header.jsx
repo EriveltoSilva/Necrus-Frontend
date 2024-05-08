@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import { URL_ROUTES } from '../utils/constants';
+import { useAuthStore } from '../store/auth';
+import { setUser } from '../utils/auth';
 
 import ImageLogo from '../components/ImageLogo';
 import MyMenuBar from '../components/bug/MyMenuBar';
@@ -12,6 +14,19 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 
 
 function Header() {
+
+    useEffect(()=>{
+        setUser()
+    },[])
+    
+    const [isLoggedIn, user] = useAuthStore((state) => [
+        state.isLoggedIn,
+        state.user,
+    ]);
+
+    // console.log(isLoggedIn());
+    console.log(user().username);
+
 
     return (
         <>

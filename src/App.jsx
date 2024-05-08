@@ -39,11 +39,11 @@ function App() {
             <Header />
             <Routes>
                 {/* User Authentication  Components */}
-                <Route path="/login" element={<Login />} />
-                <Route path="/logout" element={<Logout />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/create-new-password" element={< CreatePassword />} />
+                <Route path={URL_ROUTES.LOGIN} element={<Login />} />
+                <Route path={URL_ROUTES.LOGOUT} element={<Logout />} />
+                <Route path={URL_ROUTES.REGISTER} element={<Register />} />
+                <Route path={URL_ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
+                <Route path={URL_ROUTES.CREATE_NEW_PASSWORD} element={< CreatePassword />} />
 
 
                 {/* Store Components */}

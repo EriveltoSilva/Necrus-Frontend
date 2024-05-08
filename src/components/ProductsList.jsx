@@ -32,8 +32,8 @@ function ProductsList({ title, products }) {
                                 </div>
 
                                 <div className="text-center">
-                                    <Link to={""} title="Adicionar ao Carrinho">
-                                        <Button icon="pi pi-shopping-cart" aria-label="Carrinho" className='ml-1 btn-primary border-round' />
+                                    <Link to={`/products/detail/${product.slug}/`} title="Ver Datalhes">
+                                        <Button icon="pi pi-eye" aria-label="Detalhes" className='ml-1 btn-primary border-round' />
                                     </Link>
 
                                     <Link to={""} title="Adicionar aos favoritos">
