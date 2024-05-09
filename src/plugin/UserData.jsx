@@ -1,4 +1,3 @@
-import { formToJSON } from 'axios';
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
 
@@ -12,7 +11,6 @@ function UserData() {
         const decoded = jwtDecode(token);
         return decoded;
     }
-    console.log("USER token does not exist!");
 }
 
 

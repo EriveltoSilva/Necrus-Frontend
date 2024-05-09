@@ -15,17 +15,18 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 
 function Header() {
 
-    useEffect(()=>{
-        setUser()
-    },[])
-    
     const [isLoggedIn, user] = useAuthStore((state) => [
         state.isLoggedIn,
         state.user,
     ]);
 
-    // console.log(isLoggedIn());
-    console.log(user().username);
+    useEffect(()=>{
+        setUser();
+        // console.log(isLoggedIn());
+        // console.log(user().username);
+    },[])
+    
+
 
 
     return (
