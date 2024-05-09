@@ -15,6 +15,8 @@ import { Button } from 'primereact/button';
 function Cart() {
 
     const [cart, setCart] = useState([]);
+    const [cartTotal, setCartTotal] = useState([]);
+
     const [quantity, setQuantity] = useState(1);
     const userData = UserData();
     const cartId = CartID();
@@ -22,22 +24,29 @@ function Cart() {
     
     const fetchCartData = (cartId, userId) => {
         let url = userId ? `cart-list/${cartId}/${userId}/` : `cart-list/${cartId}/`;
-        apiInstance.get(url).then(resp => resp.data).then(resp => {
-            setCart(resp);
-        });
+        apiInstance.get(url)
+        .then(resp => resp.data)
+        .then(resp =>setCart(resp));
+    }
+    
+    const fetchCartTotal= (cartId, userId) => {
+        let url = userId ? `cart-detail/${cartId}/${userId}/` : `cart-detail/${cartId}/`;
+        console.log(userId);
+        apiInstance.get(url)
+        .then(resp => resp.data)
+        .then(resp =>setCartTotal(resp));
     }
 
-    // if (cartId !== null || cartId !== undefined) {
-    //     if (userData !== undefined || userData !== null)
-    //         useEffect(() => { fetchCartData(cartId, userData?.user_id); }, []);
-    //     else
-    //         useEffect(() => { fetchCartData(cartId, null); }, []);
-    // }
+
     if (cartId !== null || cartId !== undefined) {
-        useEffect(() => { let user_id = (userData)? userData?.user_id:null; fetchCartData(cartId, user_id);} ,[]);
+        useEffect(() => { 
+            let user_id = (userData)? userData?.user_id:null; 
+            fetchCartData(cartId, user_id);
+            fetchCartTotal(cartId,user_id);
+        } ,[]);
     }
 
-    console.log(cart);
+    console.log(cartTotal);
 
     return (
         <>
@@ -149,21 +158,29 @@ function Cart() {
                             </span>
                         </h2>
 
-                        <div className="bg-light p-30 mb-5">
+                        <div className="bg-light p-5 mb-5">
                             <div className="border-bottom pb-2">
-                                <div className="d-flex justify-content-between mb-3">
+                                <div className="flex justify-content-between mb-3">
                                     <h3 className='h6 mt-3'>Subtotal</h3>
-                                    0,00kz
+                                    <p className='mt-3'>{cartTotal?.sub_total?.toFixed(2)}kz</p>
                                 </div>
-                                <div className="d-flex justify-content-between">
+                                <div className="flex justify-content-between">
+                                    <h6 className="font-weight-medium">Impostos</h6>
+                                    <p className="font-weight-medium">{cartTotal?.tax_fee?.toFixed(2)}kz</p>
+                                </div>
+                                <div className="flex justify-content-between">
+                                    <h6 className="font-weight-medium">Serviço</h6>
+                                    <p className="font-weight-medium">{cartTotal?.service_fee?.toFixed(2)}kz</p>
+                                </div>
+                                <div className="flex justify-content-between">
                                     <h6 className="font-weight-medium">Entrega</h6>
-                                    <h6 className="font-weight-medium">0,00kz</h6>
+                                    <p className="font-weight-medium">{cartTotal?.shipping_amount?.toFixed(2)}kz</p>
                                 </div>
                             </div>
                             <div className="pt-2">
-                                <div className="d-flex justify-content-between mt-2">
+                                <div className="flex justify-content-between mt-2">
                                     <h5>Total</h5>
-                                    <h5>0,00kz</h5>
+                                    <h5>{cartTotal?.total}kz</h5>
                                 </div>
 
                                 <div>

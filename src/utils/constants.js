@@ -12,6 +12,7 @@ export const URL_ROUTES = {
 
     "DASHBOARD":"/dashboard",
     "PRODUCT_DETAIL":"/products/detail/:slug/",
+    "PRODUCTS_BY_CATEGORY":"/products/category/list/:slug/",
     "PRODUCTS":"/products",
     "HIGHLIGHTS":"/highlights",
     "CONTACTS":"/contacts",

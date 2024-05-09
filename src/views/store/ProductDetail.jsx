@@ -57,14 +57,14 @@ function ProductDetail() {
         e.preventDefault();
         if (!isFieldsValid()) return;
         // console.log("-----------------------------------------------");
-        // console.log("Product ID:", product.id);
+        console.log("Product ID:", product.id);
         // console.log("PRICE:", product.price);
         // console.log("shipping_amount:", product?.shipping_amount);
         // console.log("SIZE:", size);
         // console.log("COLOR:", color);
         // console.log("QUANTITY:", quantity);
         // console.log("Country:", currentAddress);
-        // console.log("USER ID", userData?.user_id);
+        console.log("USER ID", userData?.user_id);
         // console.log("CART ID:", cartId);
         // console.log("-----------------------------------------------");
 
@@ -189,7 +189,6 @@ function ProductDetail() {
 
 
                             <div className="flex flex-wrap align-items-center mb-4 pt-2">
-
                                 <div>
                                     <Button
                                         icon="pi pi-minus"

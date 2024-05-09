@@ -85,17 +85,13 @@ function Checkout() {
             </h5>
             <div className="bg-light p-5 mb-5">
               <div className="row">
-                <div className="md:col-6 flex flex-column gap-2">
-                  <label htmlFor="firstName">Primeiro Nome</label>
-                  <InputText id="firstName" aria-describedby="firstNameHelp" placeholder='Ex: Fulano' />
-                  <small id="firstNameHelp"></small>
+                <div className="md:col-12 flex flex-column gap-2">
+                  <label htmlFor="fullName">Primeiro Nome</label>
+                  <InputText id="fullName" aria-describedby="fullNameHelp" placeholder='Ex: Fulano' />
+                  <small id="fullNameHelp"></small>
                 </div>
 
-                <div className="md:col-6 flex flex-column gap-2">
-                  <label htmlFor="lastName">Sobrenome</label>
-                  <InputText id="lastName" aria-describedby="lastNameHelp" placeholder='Ex: Beltrano' />
-                  <small id="lastNameHelp"></small>
-                </div>
+                
 
                 <div className="md:col-6 flex flex-column gap-2">
                   <label htmlFor="email">E-mail</label>
