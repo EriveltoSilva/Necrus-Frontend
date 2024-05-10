@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 import CartID from '../plugin/CartID';
@@ -60,6 +60,7 @@ function ProductsList({ title, products }) {
 
     const handlerAddtoCart = async () => {
         if (!isFieldsValid()) return;
+        // console.log("Produto:", product);
         // console.log("-----------------------------------------------");
         // console.log("Product ID:", product?.id);
         // console.log("PRICE:", product?.price);
@@ -92,15 +93,16 @@ function ProductsList({ title, products }) {
             console.error(error);
         }
         setVisible(false);
+        clearProductFields();
     }
 
 
-    useEffect(()=>{
+    const clearProductFields = () =>{
         setSize("");
         setColor("");
         setQuantity(1);
         setProduct(null);
-    },[visible])
+    }
 
 
 
@@ -108,7 +110,7 @@ function ProductsList({ title, products }) {
         event.preventDefault();
         setProduct(product);
         setSizes(product?.size);
-        setColors(product?.color)
+        setColors(product?.color);
         setVisible(true);
     }
     

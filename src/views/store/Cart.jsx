@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, resolvePath } from 'react-router-dom';
 
 import { URL_ROUTES } from '../../utils/constants';
 import apiInstance from '../../utils/axios';
@@ -91,7 +91,7 @@ function Cart() {
             formData.append("size", size);
             formData.append("color", color);
             formData.append("quantity", quantity);
-            
+
             formData.append("country", currentAddress?.country.toUpperCase());
             formData.append("user_id", userData?.user_id);
             formData.append("cart_id", cartId);
@@ -106,7 +106,21 @@ function Cart() {
             toastAlert.current.show({ severity: 'error', summary: 'Carrinho🛒!', detail: "Erro actualizando o Carrinho 😢!" });
         }
     }
-    
+
+    const handleDeleteCartItem = async (e, itemId) => {
+
+        const url = (userData?.user_id) ? `cart-delete/${cartId}/${itemId}/${userData?.user_id}/` : `cart-delete/${cartId}/${itemId}/`;
+
+        await apiInstance.delete(url).then((res => {
+            toastAlert.current.show({ severity: 'success', summary: 'Carrinho🛒!', detail: "Item Deletado com Sucesso!👌!" });
+            fetchCartData(cartId, userData?.user_id);
+            fetchCartTotal(cartId, userData?.user_id);
+        })).catch((error) => {
+            toastAlert.current.show({ severity: 'error', summary: 'Carrinho🛒!', detail: "Ocorreu com erro deletando o item do carrinho 🚮!" });
+            console.error(error);
+        });
+    }
+
     return (
         <>
             <main>
@@ -182,7 +196,7 @@ function Cart() {
                                                         aria-label="Salvar"
                                                         type='button'
                                                         className='ml-1 btn btn-primary border-round'
-                                                        onClick={(e)=> updateCart(item?.product, item?.size, item?.color)}
+                                                        onClick={(e) => updateCart(item?.product, item?.size, item?.color)}
                                                     />
                                                 </div>
                                             </td>
@@ -198,14 +212,14 @@ function Cart() {
                                                     severity="primary"
                                                     type='submit'
                                                     className='btn-danger'
-                                                    onClick={(e) => setQuantity((quantity) => { return ((--quantity < 1) ? 1 : quantity) })}
+                                                    onClick={(e) => handleDeleteCartItem(e, item?.id)}
                                                 />
                                             </td>
                                         </tr>
 
                                     ))}
 
-                                    {!cart &&
+                                    {cart.length < 1  &&
                                         <tr>
                                             <td colSpan={"6"}>
                                                 <p>Ainda não foram adicionados items ao carrinho.</p>
