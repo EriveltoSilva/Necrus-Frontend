@@ -59,7 +59,7 @@ function Footer() {
                       severity="primary"
                       aria-label="Registar"
                       type='submit'
-                      className='ml-1 btn-primary'
+                      className='ml-1 btn-primary border-round'
                     />
 
                   </div>
