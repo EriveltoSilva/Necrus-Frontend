@@ -33,8 +33,8 @@ function Checkout() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [province, setProvince] = useState('');
   const [address, setAddress] = useState('');
+  const [country, setCountry] = useState('Angola');
 
   const cities = [
     { name: 'BENGO', code: 'BG' }, { name: 'BENGUELA', code: 'BL' },
@@ -45,9 +45,6 @@ function Checkout() {
     { name: 'UíGE', code: 'UG' }, { name: 'ZAÍRE', code: 'ZR' },
   ];
 
-  useEffect(()=>{
-    setProvince(selectedProvince?.name)
-  },[selectedProvince]);
 
   const fetchCartData = (cartId, userId) => {
     let url = userId ? `cart-list/${cartId}/${userId}/` : `cart-list/${cartId}/`;
@@ -64,7 +61,6 @@ function Checkout() {
       .then(resp => setCartTotal(resp));
   }
 
-
   if (cartId !== null || cartId !== undefined) {
     useEffect(() => {
       let user_id = (userData) ? userData?.user_id : null;
@@ -72,6 +68,7 @@ function Checkout() {
       fetchCartTotal(cartId, user_id);
     }, []);
   }
+
   const isFieldsValid = () => {
     let flag = false;
     if (!fullName) {
@@ -90,7 +87,7 @@ function Checkout() {
       toastAlert.current.show({ severity: 'error', summary: 'Ordem!', detail: "O campo Nº de Telefone  não foi preechido 😢!" });
       return false;
     }
-    if (!province) {
+    if (!selectedProvince?.name) {
       toastAlert.current.show({ severity: 'error', summary: 'Ordem!', detail: "O campo provincia  não foi preechido 😢!" });
       return false;
     }
@@ -98,163 +95,201 @@ function Checkout() {
     return true;
   }
 
-  const handleOrder = (e) => {
-    if (!isFieldsValid()) return;
-    console.log("-------------------------------------------");
-    console.log("FULLNAME:", fullName);
-    console.log("EMAIL:", email);
-    console.log("PHONE:", phone);
-    // console.log("COUNTRY:", currentAddress.country);
-    console.log("PROVINCE:", province);
-    console.log("ADDRESS:", address);
-    console.log("-------------------------------------------");
-    toastAlert.current.show({ severity: 'success', summary: 'Carrinho🛒!', detail: "Carrinho actualizado com Sucesso!👌!" });
+  const handleOrder = async (e) => {
+    if (!isFieldsValid())return;
+
+    // {
+    //   console.log("-------------------------------------------");
+    //   console.log("CART_ID:", cartId);
+    //   console.log("USER_ID:", userData ? userData?.user_id : 0);
+    //   console.log("FULLNAME:", fullName);
+    //   console.log("EMAIL:", email);
+    //   console.log("PHONE:", phone);
+    //   console.log("COUNTRY:", country);
+    //   console.log("PROVINCE:", selectedProvince?.name);
+    //   console.log("ADDRESS:", address);
+    //   console.log("-------------------------------------------");
+    // }
+
+    try {
+      const url = `create-order/`
+      const formData = new FormData();
+      formData.append("cart_id", cartId);
+      formData.append("user_id", userData ? userData?.user_id : 0);
+      formData.append("full_name", fullName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("country", country);
+      formData.append("province", selectedProvince?.name);
+      formData.append("address", address);
+
+      await apiInstance.post(`create-order/`, formData).then(resp=>resp.data).then((resp)=>{
+        toastAlert.current.show({ severity: 'success', summary: 'Ordem de Compra🛍️!', detail: "Carrinho actualizado com Sucesso!👌!" });
+      })
+      .catch(error => {
+        console.error(error);
+        toastAlert.current.show({ severity: 'error', summary: 'Ordem de Compra🛍️!', detail: "Erro efectuando a ordem de comprea 🚫!" });
+      });
+
+    }
+    catch (error) {
+      console.error(error);
+    }
   }
 
 
-  
+
+
   return (
-    <>
-      <Toast ref={toastAlert} />
-      <CustomBreadCrumb items={['Necrus', 'loja', 'Checkout']} />
+      <>
+        <Toast ref={toastAlert} />
+        <CustomBreadCrumb items={['Necrus', 'loja', 'Checkout']} />
 
-      <div className="w-full p-5">
-        <div className="row xl:px-5">
-          <div className="col-12 flex justify-content-end">
-            <Link to={URL_ROUTES.GO_TO_CART} className="btn btn-primary">
-              <i className="pi pi-arrow-left mr-2"></i>
-              Voltar ao Carrinho
-            </Link>
-          </div>
-          <div className="lg:col-8">
-            <h5 className="section-title position-relative text-uppercase mb-3">
-              <span className="bg-secondary pr-3">Dados Pessoais e Endereço</span>
-            </h5>
-            <div className="bg-light p-5 mb-5">
-              <div className="row">
-                <div className="md:col-12 flex flex-column gap-2">
-                  <label htmlFor="fullName">Nome Completo</label>
-                  <InputText id="fullName" onChange={(e) => setFullName(e.target.value)} aria-describedby="fullNameHelp" placeholder='Ex: Fulano' />
-                  <small id="fullNameHelp"></small>
-                </div>
-
-
-
-                <div className="md:col-6 flex flex-column gap-2">
-                  <label htmlFor="email">E-mail</label>
-                  <InputText type='email' id="email" onChange={(e) => setEmail(e.target.value)} aria-describedby="emailHelp" placeholder='Ex: fulano@necrus.com' />
-                  <small id="emailHelp"></small>
-                </div>
-
-                <div className="md:col-6 flex flex-column gap-2">
-                  <label htmlFor="phone" className="font-bold block mb-2">Nº de Telefone</label>
-                  <InputMask id="phone" mask="999-999-999" onChange={(e) => setPhone(e.target.value)} placeholder="940-811-141"></InputMask>
-                  <small id="phoneHelp"></small>
-                </div>
-
-                <div className="md:col-6 flex flex-column gap-2">
-                  <label htmlFor="province">Provincia</label>
-                  <Dropdown filter value={selectedProvince} onChange={(e) => setSelectedProvince(e.value)} options={cities} optionLabel="name" placeholder="Selecione a provincia" className="w-full" />
-                  <small id="provinceHelp"></small>
-                </div>
-
-                <div className="md:col-6 flex flex-column gap-2">
-                  <label htmlFor="address">Endereço</label>
-                  <InputText id="address" aria-describedby="addressHelp" onChange={(e) => setAddress(e.target.value)} placeholder='Ex: Angola, Luanda, Rangel, Rua Rubra, Casa nº 21' />
-                  <small id="addressHelp"></small>
-                </div>
-
-                <div className="md:col-6 flex flex-wrap gap-3">
-                  <div className="flex align-items-center">
-                    <RadioButton inputId="newaccount" name="newaccount" value="Y" onChange={(e) => console.log(e.target.value)} checked={true} />
-                    <label htmlFor="newaccount" className="ml-2">Aproveitar e criar conta</label>
-                  </div>
-                </div>
-              </div>
+        <div className="w-full p-5">
+          <div className="row xl:px-5">
+            <div className="col-12 flex justify-content-end">
+              <Link to={URL_ROUTES.GO_TO_CART} className="btn btn-primary">
+                <i className="pi pi-arrow-left mr-2"></i>
+                Voltar ao Carrinho
+              </Link>
             </div>
-          </div>
-
-          <div className="lg:col-4">
-            <h5 className="section-title position-relative text-uppercase mb-3">
-              <span className="bg-secondary pr-3">Total da Ordem</span>
-            </h5>
-            <div className="bg-light p-5 mb-5 p-3">
-              <div className="border-bottom">
-                <h6 className="mb-3">Produtos</h6>
-                {cart?.map((item, index) => (
-                  <article key={index} className="flex justify-content-between">
-                    <p>{item?.product.title}</p>
-                    <p>{item?.total}kz</p>
-                  </article>
-                ))}
-
-
-                {cart.length < 1 &&
-                  <div className="flex justify-content-between text-danger">
-                    <p>Não há items registrados para compra</p>
-                  </div>
-                }
-              </div>
-
-
-              <div className="border-bottom pt-3 pb-2">
-                <div className="flex justify-content-between mb-3">
-                  <h6>Subtotal</h6>
-                  <h6>{cartTotal?.sub_total?.toFixed(2)}kz</h6>
-                </div>
-
-                <div className="flex justify-content-between mb-3">
-                  <h6>Impostos</h6>
-                  <h6>{cartTotal?.tax_fee?.toFixed(2)}kz</h6>
-                </div>
-
-                <div className="flex justify-content-between">
-                  <h6 className="font-weight-medium">Serviço</h6>
-                  <h6 className="font-weight-medium">{cartTotal?.service_fee?.toFixed(2)}kz</h6>
-                </div>
-
-                <div className="flex justify-content-between">
-                  <h6 className="font-weight-medium">Entrega</h6>
-                  <h6 className="font-weight-medium">{cartTotal?.shipping_amount?.toFixed(2)}kz</h6>
-                </div>
-              </div>
-              <div className="pt-2">
-                <div className="flex justify-content-between mt-2">
-                  <h5>Total</h5>
-                  <h5>{cartTotal?.total?.toFixed(2)}kz</h5>
-                </div>
-              </div>
-            </div>
-
-
-            <div className="mb-5 p-5">
+            <div className="lg:col-8">
               <h5 className="section-title position-relative text-uppercase mb-3">
-                <span className="bg-secondary pr-3">Pagamento</span>
+                <span className="bg-secondary pr-3">Dados Pessoais e Endereço</span>
               </h5>
+              <div className="bg-light p-5 mb-5">
+                <div className="row">
+                  <div className="md:col-12 flex flex-column gap-2">
+                    <label htmlFor="fullName">Nome Completo</label>
+                    <InputText id="fullName" onChange={(e) => setFullName(e.target.value)} aria-describedby="fullNameHelp" placeholder='Ex: Fulano' />
+                    <small id="fullNameHelp"></small>
+                  </div>
 
-              <div className="bg-light p-3">
-                <div className="flex flex-wrap gap-3">
-                  <div className="flex align-items-center">
-                    <RadioButton inputId="paymentMode" name="multicaizaExpress" value="Multicaixa Express" onChange={(e) => console.log(e.target.value)} checked={true} />
-                    <label htmlFor="paymentMode" className="ml-2">Multicaxa Express</label>
+
+
+                  <div className="md:col-6 flex flex-column gap-2">
+                    <label htmlFor="email">E-mail</label>
+                    <InputText type='email' id="email" onChange={(e) => setEmail(e.target.value)} aria-describedby="emailHelp" placeholder='Ex: fulano@necrus.com' />
+                    <small id="emailHelp"></small>
+                  </div>
+
+                  <div className="md:col-6 flex flex-column gap-2">
+                    <label htmlFor="phone" className="font-bold block mb-2">Nº de Telefone</label>
+                    <InputMask id="phone" mask="999-999-999" onChange={(e) => setPhone(e.target.value)} placeholder="940-811-141"></InputMask>
+                    <small id="phoneHelp"></small>
+                  </div>
+
+
+
+                  <div className="md:col-6 flex flex-column gap-2">
+                    <label htmlFor="country">País</label>
+                    <InputText id="country" readOnly value={country} aria-describedby="countryHelp" placeholder='Ex: Angola, Portugal...' />
+                    <small id="countryHelp"></small>
+                  </div>
+
+                  <div className="md:col-6 flex flex-column gap-2">
+                    <label htmlFor="province">Provincia</label>
+                    <Dropdown filter value={selectedProvince} onChange={(e) => setSelectedProvince(e.value)} options={cities} optionLabel="name" placeholder="Selecione a provincia" className="w-full" />
+                    <small id="provinceHelp"></small>
+                  </div>
+
+                  <div className="md:col-6 flex flex-column gap-2">
+                    <label htmlFor="address">Endereço</label>
+                    <InputText id="address" aria-describedby="addressHelp" onChange={(e) => setAddress(e.target.value)} placeholder='Ex: Angola, Luanda, Rangel, Rua Rubra, Casa nº 21' />
+                    <small id="addressHelp"></small>
+                  </div>
+
+                  <div className="md:col-6 flex flex-wrap gap-3">
+                    <div className="flex align-items-center">
+                      <RadioButton inputId="newaccount" name="newaccount" value="Y" onChange={(e) => console.log(e.target.value)} checked={true} />
+                      <label htmlFor="newaccount" className="ml-2">Aproveitar e criar conta</label>
+                    </div>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <Button
-                  icon="pi pi-cart-arrow-down"
-                  severity="primary"
-                  label='Realizar Compra'
-                  type='submit'
-                  onClick={handleOrder}
-                  className='btn btn-block btn-primary font-weight-bold py-3 mt-4'
-                />
+            <div className="lg:col-4">
+              <h5 className="section-title position-relative text-uppercase mb-3">
+                <span className="bg-secondary pr-3">Total da Ordem</span>
+              </h5>
+              <div className="bg-light p-5 mb-5 p-3">
+                <div className="border-bottom">
+                  <h6 className="mb-3">Produtos</h6>
+                  {cart?.map((item, index) => (
+                    <article key={index} className="flex justify-content-between">
+                      <p>{item?.product.title}</p>
+                      <p>{item?.total}kz</p>
+                    </article>
+                  ))}
+
+
+                  {cart.length < 1 &&
+                    <div className="flex justify-content-between text-danger">
+                      <p>Não há items registrados para compra</p>
+                    </div>
+                  }
+                </div>
+
+
+                <div className="border-bottom pt-3 pb-2">
+                  <div className="flex justify-content-between mb-3">
+                    <h6>Subtotal</h6>
+                    <h6>{cartTotal?.sub_total?.toFixed(2)}kz</h6>
+                  </div>
+
+                  <div className="flex justify-content-between mb-3">
+                    <h6>Impostos</h6>
+                    <h6>{cartTotal?.tax_fee?.toFixed(2)}kz</h6>
+                  </div>
+
+                  <div className="flex justify-content-between">
+                    <h6 className="font-weight-medium">Serviço</h6>
+                    <h6 className="font-weight-medium">{cartTotal?.service_fee?.toFixed(2)}kz</h6>
+                  </div>
+
+                  <div className="flex justify-content-between">
+                    <h6 className="font-weight-medium">Entrega</h6>
+                    <h6 className="font-weight-medium">{cartTotal?.shipping_amount?.toFixed(2)}kz</h6>
+                  </div>
+                </div>
+                <div className="pt-2">
+                  <div className="flex justify-content-between mt-2">
+                    <h5>Total</h5>
+                    <h5>{cartTotal?.total?.toFixed(2)}kz</h5>
+                  </div>
+                </div>
+              </div>
+
+
+              <div className="mb-5 p-5">
+                <h5 className="section-title position-relative text-uppercase mb-3">
+                  <span className="bg-secondary pr-3">Pagamento</span>
+                </h5>
+
+                <div className="bg-light p-3">
+                  <div className="flex flex-wrap gap-3">
+                    <div className="flex align-items-center">
+                      <RadioButton inputId="paymentMode" name="multicaizaExpress" value="Multicaixa Express" onChange={(e) => console.log(e.target.value)} checked={true} />
+                      <label htmlFor="paymentMode" className="ml-2">Multicaxa Express</label>
+                    </div>
+                  </div>
+
+                  <Button
+                    icon="pi pi-cart-arrow-down"
+                    severity="primary"
+                    label='Realizar Compra'
+                    type='submit'
+                    onClick={handleOrder}
+                    className='btn btn-block btn-primary font-weight-bold py-3 mt-4'
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </>
-  )
-}
+      </>
+    )
+  }
 
-export default Checkout
+  export default Checkout
