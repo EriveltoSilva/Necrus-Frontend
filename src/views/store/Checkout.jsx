@@ -20,9 +20,9 @@ function Checkout() {
   const toastAlert = useRef(null);
   const params = useParams();
 
-  const userData = UserData();
+  const userData = UserData(null);
   
-  const [order, setOrder] = useState([]);
+  const [order, setOrder] = useState({});
   const [discountCoupon, setDiscountCoupon] = useState('');
 
 
@@ -64,7 +64,7 @@ function Checkout() {
               <div className="row">
                 <div className="md:col-12 flex flex-column gap-2">
                   <label htmlFor="fullName">Nome Completo</label>
-                  <InputText id="fullName" readOnly value={order?.full_name} aria-describedby="fullNameHelp" placeholder='Ex: Fulano' />
+                  <InputText id="fullName" readOnly value={order?.full_name || ''} aria-describedby="fullNameHelp" placeholder='Ex: Fulano' />
                   <small id="fullNameHelp"></small>
                 </div>
 
@@ -72,43 +72,38 @@ function Checkout() {
 
                 <div className="md:col-6 flex flex-column gap-2">
                   <label htmlFor="email">E-mail</label>
-                  <InputText type='email' id="email" readOnly value={order?.email} aria-describedby="emailHelp" placeholder='Ex: fulano@necrus.com' />
+                  <InputText type='email' id="email" readOnly value={order?.email || ''} aria-describedby="emailHelp" placeholder='Ex: fulano@necrus.com' />
                   <small id="emailHelp"></small>
                 </div>
 
                 <div className="md:col-6 flex flex-column gap-2">
                   <label htmlFor="phone" className="font-bold block mb-2">Nº de Telefone</label>
-                  <InputMask id="phone" mask="999-999-999" readOnly value={order?.phone} placeholder="940-811-141"></InputMask>
+                  <InputMask id="phone" mask="999-999-999" readOnly value={order?.phone || ''} placeholder="940-811-141"></InputMask>
                   <small id="phoneHelp"></small>
                 </div>
 
 
                 <div className="md:col-6 flex flex-column gap-2">
                   <label htmlFor="country">País</label>
-                  <InputText id="country" readOnly value={order?.country} aria-describedby="countryHelp" placeholder='Ex: Angola, Portugal...' />
+                  <InputText id="country" readOnly value={order?.country || ''} aria-describedby="countryHelp" placeholder='Ex: Angola, Portugal...' />
                   <small id="countryHelp"></small>
-                </div>
+                </div> 
+                
 
                 <div className="md:col-6 flex flex-column gap-2">
                   <label htmlFor="province">Provincia</label>
-                  <InputText id="province" readOnly value={order?.province} aria-describedby="provinceHelp" placeholder='Ex: Angola, Portugal...' />
+                  <InputText id="province" readOnly value={order?.province || ''} aria-describedby="provinceHelp" placeholder='Ex: Angola, Portugal...' />
                   <small id="provinceHelp"></small>
                 </div>
 
                 <div className="md:col-6 flex flex-column gap-2">
                   <label htmlFor="address">Endereço</label>
-                  <InputText id="address" aria-describedby="addressHelp" readOnly value={order?.address} placeholder='Ex: Angola, Luanda, Rangel, Rua Rubra, Casa nº 21' />
+                  <InputText id="address" aria-describedby="addressHelp" readOnly value={order?.address || ''} placeholder='Ex: Angola, Luanda, Rangel, Rua Rubra, Casa nº 21' />
                   <small id="addressHelp"></small>
-                </div>
-
-                {/* <div className="md:col-6 flex flex-wrap gap-3">
-                    <div className="flex align-items-center">
-                    <RadioButton inputId="newaccount" name="newaccount" value="Y" onChange={(e) => console.log(e.target.value)} checked={true} />
-                    <label htmlFor="newaccount" className="ml-2">Aproveitar e criar conta</label>
-                    </div>
-                  </div> */}
-
+                </div> 
+                
               </div>
+
             </div>
           </div>
 
