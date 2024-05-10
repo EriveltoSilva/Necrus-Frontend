@@ -336,7 +336,7 @@ function Cart() {
                                     {cart.length < 1 &&
                                         <tr>
                                             <td colSpan={"6"}>
-                                                <p>Ainda não foram adicionados items ao carrinho.</p>
+                                                <p className='text-danger'>Ainda não foram adicionados items ao carrinho.</p>
                                             </td>
                                         </tr>
                                     }
@@ -344,29 +344,14 @@ function Cart() {
                             </table>
                         </div>
                         <div className="col-12 xl:col-4">
-                            <form className="mb-30">
-                                <div className="input-group">
-                                    <input type="text" className="form-control border-0 p-4" placeholder="Código do Desconto" />
-                                    <div className="input-group-append">
-                                        <Button
-                                            icon="pi pi-tags"
-                                            severity="primary"
-                                            label='Aplicar Coupon de Desconto'
-                                            type='button'
-                                            className='btn btn-primary'
-                                            onClick={(e) => alert("sads")}
-                                        />
-                                    </div>
-                                </div>
-                            </form>
-                            <h2 className="h5 section-title position-relative text-uppercase mb-3 mt-5">
+                            <h2 className="h5 section-title position-relative text-uppercase mb-3">
                                 <span className="bg-secondary pr-3">
                                     Resumo do Carrinho
                                 </span>
                             </h2>
 
                             <div className="bg-light p-5 mb-5">
-                                <div className="border-bottom pb-2">
+                                <div className="border-bottom-1 pb-2">
                                     <div className="flex justify-content-between mb-3">
                                         <h3 className='h6 mt-3'>Subtotal</h3>
                                         <p className='mt-3'>{cartTotal?.sub_total?.toFixed(2)}kz</p>
