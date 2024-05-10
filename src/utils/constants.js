@@ -20,5 +20,5 @@ export const URL_ROUTES = {
     "FAQS":"/faqs",
     "WISHLIST":"/wishlist",
     "GO_TO_CART":"/cart",
-    "CHECKOUT": "/checkout",
+    "CHECKOUT": "/checkout/:order_oid",
 }

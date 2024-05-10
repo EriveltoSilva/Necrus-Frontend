@@ -9,7 +9,7 @@ function CustomBreadCrumb({items, homeURL}) {
     const newItems = items?.map((item)=> ({label:item}) )
 
   return (
-    <BreadCrumb model={newItems} home={home} className='mx-2' />
+    <BreadCrumb model={newItems} home={home} />
   )
 }
 

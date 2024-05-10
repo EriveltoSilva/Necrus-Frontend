@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, resolvePath } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { URL_ROUTES } from '../../utils/constants';
 import apiInstance from '../../utils/axios';
@@ -12,10 +12,19 @@ import CustomBreadCrumb from '../../components/CustomBreadCrumb';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
 import { InputNumber } from 'primereact/inputnumber';
+import { RadioButton } from 'primereact/radiobutton';
+import { InputText } from 'primereact/inputtext';
+import { InputMask } from 'primereact/inputmask';
+import { Dropdown } from 'primereact/dropdown';
+import { Image } from 'primereact/image';
 
+import AddresImage from '../../assets/img/address.png'
 
 function Cart() {
+    const navigate = useNavigate();
     const toastAlert = useRef(null);
+
+    const [formVisibility, setFormVisibility] = useState(false);
 
     const [cart, setCart] = useState([]);
     const [cartTotal, setCartTotal] = useState([]);
@@ -23,11 +32,39 @@ function Cart() {
     const [quantity, setQuantity] = useState(1);
     const [productQuantities, setProductQuantities] = useState({})
 
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [address, setAddress] = useState('');
+    const [country, setCountry] = useState('Angola');
+    const [selectedProvince, setSelectedProvince] = useState(null);
+
     /** UTILITIES FUNCTIONS */
     const userData = UserData();
     const cartId = CartID();
-    const currentAddress = GetCurrentAddress()
+    const currentAddress = GetCurrentAddress();
 
+    const cities = [
+        { name: 'BENGO', code: 'BG' }, { name: 'BENGUELA', code: 'BL' },
+        { name: 'CABINDA', code: 'CB' }, { name: 'CUNENE', code: 'CN' },
+        { name: 'LUANDA', code: 'LD' }, { name: 'HUILA', code: 'HU' },
+        { name: 'HUAMBO', code: 'HB' }, { name: 'MALANJE', code: 'PRS' },
+        { name: 'MOXICO', code: 'MX' }, { name: 'NAMIBE', code: 'NB' },
+        { name: 'UíGE', code: 'UG' }, { name: 'ZAÍRE', code: 'ZR' },
+    ];
+
+    useEffect(() => {
+        let initialQuantities = {}
+        cart?.forEach((c) => {
+            initialQuantities[c.product?.id] = c.quantity
+        });
+        setProductQuantities(initialQuantities)
+    }, [cart]);
+
+    useEffect(() => {
+        if(cart.length <1)
+            setFormVisibility(false);
+    }, [cart]);
 
     const fetchCartData = (cartId, userId) => {
         let url = userId ? `cart-list/${cartId}/${userId}/` : `cart-list/${cartId}/`;
@@ -44,7 +81,6 @@ function Cart() {
             .then(resp => setCartTotal(resp));
     }
 
-
     if (cartId !== null || cartId !== undefined) {
         useEffect(() => {
             let user_id = (userData) ? userData?.user_id : null;
@@ -52,14 +88,6 @@ function Cart() {
             fetchCartTotal(cartId, user_id);
         }, []);
     }
-
-    useEffect(() => {
-        let initialQuantities = {}
-        cart?.forEach((c) => {
-            initialQuantities[c.product?.id] = c.quantity
-        });
-        setProductQuantities(initialQuantities)
-    }, [cart]);
 
     const handleQuantityChange = (event, productId) => {
         const quantity = event.target.value;
@@ -121,14 +149,100 @@ function Cart() {
         });
     }
 
+    const isPersonalDataFieldsValid = () => {
+        let flag = false;
+        if (!fullName) {
+            toastAlert.current.show({ severity: 'error', summary: 'Ordem!', detail: "O campo Nome completo não foi preechido 😢!" });
+            return false;
+        }
+        if (!email) {
+            toastAlert.current.show({ severity: 'error', summary: 'Ordem!', detail: "O E-mail  não foi preechido 😢!" });
+            return false;
+        }
+        if (!address) {
+            toastAlert.current.show({ severity: 'error', summary: 'Ordem!', detail: "O campo Endereço  não foi preechido 😢!" });
+            return false;
+        }
+        if (!phone) {
+            toastAlert.current.show({ severity: 'error', summary: 'Ordem!', detail: "O campo Nº de Telefone  não foi preechido 😢!" });
+            return false;
+        }
+        if (!selectedProvince?.name) {
+            toastAlert.current.show({ severity: 'error', summary: 'Ordem!', detail: "O campo provincia  não foi preechido 😢!" });
+            return false;
+        }
+
+        return true;
+    }
+
+    const handlePersonalFormData = () => {
+        if (cart.length < 1) {
+            toastAlert.current.show({ severity: 'error', summary: 'Carrinho!🛒', detail: "Não há items no seu carrinho 😢!" });
+            return;
+        }
+        setFormVisibility(true);
+        navigate('#sectionPersonalData');
+    }
+
+    const handleOrder = async (e) => {
+        if (!isPersonalDataFieldsValid()) return;
+
+        // {
+        //   console.log("-------------------------------------------");
+        //   console.log("CART_ID:", cartId);
+        //   console.log("USER_ID:", userData ? userData?.user_id : 0);
+        //   console.log("FULLNAME:", fullName);
+        //   console.log("EMAIL:", email);
+        //   console.log("PHONE:", phone);
+        //   console.log("COUNTRY:", country);
+        //   console.log("PROVINCE:", selectedProvince?.name);
+        //   console.log("ADDRESS:", address);
+        //   console.log("-------------------------------------------");
+        // }
+
+        try {
+            const url = `create-order/`
+            const formData = new FormData();
+            formData.append("cart_id", cartId);
+            formData.append("user_id", userData ? userData?.user_id : 0);
+            formData.append("full_name", fullName);
+            formData.append("email", email);
+            formData.append("phone", phone);
+            formData.append("country", country);
+            formData.append("province", selectedProvince?.name);
+            formData.append("address", address);
+
+            await apiInstance.post(`create-order/`, formData).then(resp => resp.data)
+            .then((resp) => {
+                toastAlert.current.show({ severity: 'success', summary: 'Ordem de Compra🛍️!', detail: "Carrinho actualizado com Sucesso!👌!" });
+                setTimeout(() => {
+                    navigate(`/checkout/${resp.data.order_oid}/`);
+                }, 2000);
+            })
+            .catch(error => {
+                toastAlert.current.show({ severity: 'error', summary: 'Ordem de Compra🛍️!', detail: "Erro efectuando a ordem de comprea 🚫!" });
+                console.error(error);
+            });
+
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+
+
+
+
     return (
         <>
-            <main>
+            <main className='w-full p-5'>
                 <Toast ref={toastAlert} />
                 <CustomBreadCrumb items={['Necrus', 'loja', 'Carrinho']} />
+
                 {/* <!-- Cart Start --> */}
-                <div className="container-fluid">
-                    <div className="row xl:px-5">
+                <div className="w-full">
+                    <div className="row">
                         <div className="col-12 xl:col-8 table-responsive mb-5">
                             <table className="table table-light table-borderless table-hover text-center mb-0">
                                 <thead className="thead-dark">
@@ -219,7 +333,7 @@ function Cart() {
 
                                     ))}
 
-                                    {cart.length < 1  &&
+                                    {cart.length < 1 &&
                                         <tr>
                                             <td colSpan={"6"}>
                                                 <p>Ainda não foram adicionados items ao carrinho.</p>
@@ -277,21 +391,93 @@ function Cart() {
                                     </div>
 
                                     <div>
-                                        <Link to={URL_ROUTES.CHECKOUT} className='text-center'>
-                                            <Button
-                                                icon="pi pi-send"
-                                                severity="primary"
-                                                label='Avançar com a compra'
-                                                type='submit'
-                                                className='ml-1 btn btn-block w-6 mx-auto btn-primary font-weight-bold my-3 py-3'
-                                            />
-                                        </Link>
+                                        <Button
+                                            onClick={handlePersonalFormData}
+                                            icon="pi pi-send"
+                                            severity="primary"
+                                            label='Avançar com a compra'
+                                            type='submit'
+                                            className='ml-1 btn btn-block w-6 mx-auto btn-primary font-weight-bold my-3 py-3'
+                                        />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {formVisibility &&
+
+                    <section className='w-full' id="sectionPersonalData">
+                        <div className="row">
+                            <div className="lg:col-6 card p-5">
+                                <h5 className="text-uppercase">
+                                    <span className="bg-secondary pr-3">Dados Pessoais e Endereço</span>
+                                </h5>
+                                <div className="bg-light p-5 mb-5">
+                                    <div className="row">
+                                        <div className="md:col-12 flex flex-column gap-2">
+                                            <label htmlFor="fullName">Nome Completo</label>
+                                            <InputText id="fullName" onChange={(e) => setFullName(e.target.value)} aria-describedby="fullNameHelp" placeholder='Ex: Fulano' />
+                                            <small id="fullNameHelp"></small>
+                                        </div>
+
+                                        <div className="md:col-6 flex flex-column gap-2">
+                                            <label htmlFor="email">E-mail</label>
+                                            <InputText type='email' id="email" onChange={(e) => setEmail(e.target.value)} aria-describedby="emailHelp" placeholder='Ex: fulano@necrus.com' />
+                                            <small id="emailHelp"></small>
+                                        </div>
+
+                                        <div className="md:col-6 flex flex-column gap-2">
+                                            <label htmlFor="phone" className="font-bold block mb-2">Nº de Telefone</label>
+                                            <InputMask id="phone" mask="999-999-999" onChange={(e) => setPhone(e.target.value)} placeholder="940-811-141"></InputMask>
+                                            <small id="phoneHelp"></small>
+                                        </div>
+
+
+
+                                        <div className="md:col-6 flex flex-column gap-2">
+                                            <label htmlFor="country">País</label>
+                                            <InputText id="country" readOnly value={country} aria-describedby="countryHelp" placeholder='Ex: Angola, Portugal...' />
+                                            <small id="countryHelp"></small>
+                                        </div>
+
+                                        <div className="md:col-6 flex flex-column gap-2">
+                                            <label htmlFor="province">Provincia</label>
+                                            <Dropdown filter value={selectedProvince} onChange={(e) => setSelectedProvince(e.value)} options={cities} optionLabel="name" placeholder="Selecione a provincia" className="w-full" />
+                                            <small id="provinceHelp"></small>
+                                        </div>
+
+                                        <div className="md:col-6 flex flex-column gap-2">
+                                            <label htmlFor="address">Endereço</label>
+                                            <InputText id="address" aria-describedby="addressHelp" onChange={(e) => setAddress(e.target.value)} placeholder='Ex: Angola, Luanda, Rangel, Rua Rubra, Casa nº 21' />
+                                            <small id="addressHelp"></small>
+                                        </div>
+
+                                        <div className='col-12'>
+                                            <Button
+                                                onClick={handleOrder}
+                                                icon="pi pi-credit-card"
+                                                severity="primary"
+                                                label='Fazer Checkout'
+                                                type='button'
+                                                className='ml-1 btn btn-block w-6 mx-auto btn-primary font-weight-bold my-3 py-3'
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='lg:col-6 col-12'>
+                                <img
+                                    src={AddresImage}
+                                    alt={`Necrus - Address`}
+                                    style={{ width: '100%', height: '100vh' }}
+                                />
+                            </div>
+                        </div>
+
+                    </section>
+                }
             </main>
             {/* <!-- Cart End --> */}
         </>
