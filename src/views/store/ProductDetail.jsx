@@ -126,7 +126,7 @@ function ProductDetail() {
 
     return (
         <>
-            <section className="w-full pb-5">
+            <section className="w-full pb-5 p-3">
                 <Toast ref={toastAlert} />
                 <div className="grid xl:px-5">
                     <div className="sm:col-10 lg:col-5 sm:mb-8 sm:mx-auto">

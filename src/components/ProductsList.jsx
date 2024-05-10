@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
+import CartID from '../plugin/CartID';
 import apiInstance from '../utils/axios';
 import UserData from '../plugin/UserData';
-import CartID from '../plugin/CartID';
 import GetCurrentAddress from '../plugin/UserCountry';
 
 import { Card } from 'primereact/card';
@@ -93,7 +93,7 @@ function ProductsList({ title, products }) {
         }
         setVisible(false);
     }
-    
+
 
     useEffect(()=>{
         setSize("");
@@ -130,7 +130,7 @@ function ProductsList({ title, products }) {
                                 key={product.id}
                                 title={<Link to={`/products/detail/${product.slug}/`} className='text-dark'>{product.title} </Link>}
                                 subTitle={product.category?.title}
-                                className="sm:w-15 md:w-15rem lg:w-20rem xl:w-25rem text-center border-round mx-4 p-5"
+                                className="sm:w-15 md:w-15rem lg:w-20rem xl:w-25rem text-center border-round m-4 p-5"
                                 header={<Image src={product.image} zoomSrc={product.image} alt={product.title} preview />}
                             >
 
