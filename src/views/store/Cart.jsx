@@ -150,7 +150,6 @@ function Cart() {
     }
 
     const isPersonalDataFieldsValid = () => {
-        let flag = false;
         if (!fullName) {
             toastAlert.current.show({ severity: 'error', summary: 'Ordem!', detail: "O campo Nome completo não foi preechido 😢!" });
             return false;

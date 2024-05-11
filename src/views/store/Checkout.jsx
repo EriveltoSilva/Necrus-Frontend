@@ -23,23 +23,46 @@ function Checkout() {
   const userData = UserData(null);
   
   const [order, setOrder] = useState({});
-  const [discountCoupon, setDiscountCoupon] = useState('');
+  const [couponCode, setCouponCode] = useState('');
 
 
-  useEffect(() => {
-    apiInstance.get(`checkout/${params.order_oid}/`).then((resp) => {
+  const fetchOrderData = async()=>{
+    await apiInstance.get(`checkout/${params.order_oid}/`).then((resp) => {
       setOrder(resp.data);
       console.log(resp.data);
     })
       .catch((error) => {
         console.error(error);
       });
+
+  }
+
+  useEffect( () => {
+     fetchOrderData();
   }, []);
 
 
 
-  const handleDiscountCoupon = (e) => {
-    console.log(discountCoupon);
+  const handleDiscountCoupon = async(e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("order_oid", order.oid);
+    formData.append("coupon_code", couponCode);
+
+    apiInstance.post(`apply-coupon/`, formData)
+    .then((resp)=>(resp.data))
+    .then((resp)=>{
+      if(resp.status=='success')
+        toastAlert.current.show({ severity: resp.status, summary: 'Cupom🗒️👌', detail: "Cupom activado com sucesso 😊!" });
+      else
+        toastAlert.current.show({ severity: resp.status, summary: 'Cupom🗒️', detail: resp.message });
+      fetchOrderData();
+      setCouponCode('');
+    }).catch((error)=>{
+      setCouponCode('');
+      console.error(error);
+    })
+
   }
 
 
@@ -112,14 +135,15 @@ function Checkout() {
               <span className="bg-secondary pr-3">Total da Ordem</span>
             </h2>
 
-            <form className="card p-3">
+            <div className="card p-3">
               <div className='flex justify-content-center '>
                 <InputText
                   type='text'
-                  value={discountCoupon}
+                  value={couponCode}
                   placeholder='Código do Desconto'
                   className='mr-1'
-                  onChange={(e) => setDiscountCoupon(e.target.value)}
+                  onKeyUp={(e)=>{(e.key==='Enter')? handleDiscountCoupon(e):null}}
+                  onChange={(e) => setCouponCode(e.target.value)}
                 />
 
                 <Button
@@ -128,11 +152,11 @@ function Checkout() {
                   label='Aplicar'
                   type='button'
                   className='btn btn-primary'
-                  onClick={handleDiscountCoupon}
+                  onClick={(e) => handleDiscountCoupon(e)}
                   style={{ minHeight: '50px' }}
                 />
               </div>
-            </form>
+            </div>
 
             <div className="bg-light p-5 mb-5 p-3 mt-5">
               <section>
@@ -158,6 +182,13 @@ function Checkout() {
                     <h6 className="font-weight-medium">Entrega</h6>
                     <h6 className="font-weight-medium">{order?.shipping_amount}kz</h6>
                   </div>
+                  
+                  {order?.saved > 0 &&
+                    <div className="flex justify-content-between">
+                      <h6 className="text-danger">Desconto</h6>
+                      <h6 className="text-danger">-{order?.saved}kz</h6>
+                    </div>
+                  }
                 </div>
 
 
