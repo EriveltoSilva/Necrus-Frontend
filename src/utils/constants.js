@@ -1,4 +1,6 @@
-export const BASE_URL = 'http://127.0.0.1:8000/api/v1/'
+export const BASE_URL = 'http://127.0.0.1:8000/api/v1/';
+export const BACKEND_SERVER_URL = 'http://127.0.0.1:8000';
+
 export const URL_ROUTES = {
     "ROOT": '/',
     "LOGIN":'/login',
@@ -8,17 +10,21 @@ export const URL_ROUTES = {
     "CREATE_NEW_PASSWORD":'/create-new-password',
 
 
-    "TERMS_AND_PRIVACY":'/terms/privacy',
+    "TERMS_AND_PRIVACY":'/terms/privacy/',
 
-    "DASHBOARD":"/dashboard",
+    "DASHBOARD":"/dashboard/",
     "PRODUCT_DETAIL":"/products/detail/:slug/",
     "PRODUCTS_BY_CATEGORY":"/products/category/list/:slug/",
-    "PRODUCTS":"/products",
-    "HIGHLIGHTS":"/highlights",
-    "CONTACTS":"/contacts",
-    "ABOUT_US":"/about-us",
-    "FAQS":"/faqs",
-    "WISHLIST":"/wishlist",
-    "GO_TO_CART":"/cart",
-    "CHECKOUT": "/checkout/:order_oid",
+    "PRODUCTS":"/products/",
+    "HIGHLIGHTS":"/highlights/",
+    "CONTACTS":"/contacts/",
+    "ABOUT_US":"/about-us/",
+    "FAQS":"/faqs/",
+    "WISHLIST":"/wishlist/",
+    "GO_TO_CART":"/cart/",
+
+
+    "CHECKOUT": "/checkout/:order_oid/",
+    "PAYMENT_SUCCESS":'/checkout/payment-success/:order_oid/',
+    "PAYMENT_FAILED":'/checkout/payment-failed/:order_oid/',
 }

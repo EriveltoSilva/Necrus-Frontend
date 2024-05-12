@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import CartID from '../../plugin/CartID';
 import apiInstance from '../../utils/axios';
@@ -14,19 +14,26 @@ import { InputMask } from 'primereact/inputmask';
 import { Button } from 'primereact/button';
 import { Toast } from 'primereact/toast';
 
+import { BACKEND_SERVER_URL } from '../../utils/constants';
 
 
 function Checkout() {
   const toastAlert = useRef(null);
   const params = useParams();
+  const navigate = useNavigate();
 
   const userData = UserData(null);
-  
+
+  const [paymentLoading, setPaymentLoading] = useState(false);
   const [order, setOrder] = useState({});
   const [couponCode, setCouponCode] = useState('');
 
+  useEffect(() => {
+    fetchOrderData();
+  }, []);
 
-  const fetchOrderData = async()=>{
+
+  const fetchOrderData = async () => {
     await apiInstance.get(`checkout/${params.order_oid}/`).then((resp) => {
       setOrder(resp.data);
       console.log(resp.data);
@@ -37,37 +44,47 @@ function Checkout() {
 
   }
 
-  useEffect( () => {
-     fetchOrderData();
-  }, []);
-
-
-
-  const handleDiscountCoupon = async(e) => {
+  const handleDiscountCoupon = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("order_oid", order.oid);
     formData.append("coupon_code", couponCode);
 
     apiInstance.post(`apply-coupon/`, formData)
-    .then((resp)=>(resp.data))
-    .then((resp)=>{
-      if(resp.status=='success')
-        toastAlert.current.show({ severity: resp.status, summary: 'Cupom🗒️👌', detail: "Cupom activado com sucesso 😊!" });
-      else
-        toastAlert.current.show({ severity: resp.status, summary: 'Cupom🗒️', detail: resp.message });
-      fetchOrderData();
-      setCouponCode('');
-    }).catch((error)=>{
-      setCouponCode('');
-      console.error(error);
-    })
+      .then((resp) => (resp.data))
+      .then((resp) => {
+        if (resp.status == 'success')
+          toastAlert.current.show({ severity: resp.status, summary: 'Cupom🗒️👌', detail: "Cupom activado com sucesso 😊!" });
+        else
+          toastAlert.current.show({ severity: resp.status, summary: 'Cupom🗒️', detail: resp.message });
+        fetchOrderData();
+        setCouponCode('');
+      }).catch((error) => {
+        setCouponCode('');
+        console.error(error);
+      })
 
   }
 
-
-  const handlePayment = async (e) => {
+  const handleStripePayment = async (event) => {
+    event.preventDefault();
     console.log("Going to payment...");
+    setPaymentLoading(true);
+    await apiInstance.post(`${BACKEND_SERVER_URL}/api/v1/stripe-checkout/${order?.oid}/`)
+    .then((resp) => resp.data).then((resp)=>{
+      console.log(resp);
+      let url = '';
+      if(resp.status =='success')      
+        url=`/checkout/payment-success/${resp.data.order_oid}?session_id=${resp.data.session_id}`
+      else
+        url=`/checkout/payment-failed/${resp.data.order_oid}?session_id=${resp.data.session_id}`
+      navigate(url);
+    }).catch((error)=>{
+      toastAlert.current.show({ severity: 'error', summary: 'Pagamento💸', detail: "Error: Efectuando pagamento com sucesso 😢!" });
+      console.error(error);
+    })
+
+
     
   }
 
@@ -101,7 +118,7 @@ function Checkout() {
 
                 <div className="md:col-6 flex flex-column gap-2">
                   <label htmlFor="phone" className="font-bold block mb-2">Nº de Telefone</label>
-                  <InputMask id="phone" mask="999-999-999" readOnly value={order?.phone || ''} placeholder="940-811-141"></InputMask>
+                  <InputText id="phone" readOnly value={order?.phone || ''} aria-describedby="phoneHelp" placeholder='Ex: Telefone' />
                   <small id="phoneHelp"></small>
                 </div>
 
@@ -110,8 +127,8 @@ function Checkout() {
                   <label htmlFor="country">País</label>
                   <InputText id="country" readOnly value={order?.country || ''} aria-describedby="countryHelp" placeholder='Ex: Angola, Portugal...' />
                   <small id="countryHelp"></small>
-                </div> 
-                
+                </div>
+
 
                 <div className="md:col-6 flex flex-column gap-2">
                   <label htmlFor="province">Provincia</label>
@@ -123,8 +140,8 @@ function Checkout() {
                   <label htmlFor="address">Endereço</label>
                   <InputText id="address" aria-describedby="addressHelp" readOnly value={order?.address || ''} placeholder='Ex: Angola, Luanda, Rangel, Rua Rubra, Casa nº 21' />
                   <small id="addressHelp"></small>
-                </div> 
-                
+                </div>
+
               </div>
 
             </div>
@@ -142,7 +159,7 @@ function Checkout() {
                   value={couponCode}
                   placeholder='Código do Desconto'
                   className='mr-1'
-                  onKeyUp={(e)=>{(e.key==='Enter')? handleDiscountCoupon(e):null}}
+                  onKeyUp={(e) => { (e.key === 'Enter') ? handleDiscountCoupon(e) : null }}
                   onChange={(e) => setCouponCode(e.target.value)}
                 />
 
@@ -182,7 +199,7 @@ function Checkout() {
                     <h6 className="font-weight-medium">Entrega</h6>
                     <h6 className="font-weight-medium">{order?.shipping_amount}kz</h6>
                   </div>
-                  
+
                   {order?.saved > 0 &&
                     <div className="flex justify-content-between">
                       <h6 className="text-danger">Desconto</h6>
@@ -211,16 +228,31 @@ function Checkout() {
                     <label htmlFor="paymentMode" className="ml-2">Multicaxa Express</label>
                   </div>
                 </div>
-                <div className="bg-light p-3">
-                  <Button
-                    icon="pi pi-credit-card"
-                    severity="primary"
-                    label='Realizar Pagamento'
-                    type='submit'
-                    onClick={handlePayment}
-                    className='btn-block btn-primary w-15rem mx-auto py-3 mt-4'
-                  />
-                </div>
+                <form method="post">
+                  <div className="bg-light p-3">
+                    {
+                      paymentLoading ?
+                        <Button
+                          icon="pi pi-spin pi-spinner"
+                          disabled
+                          severity="primary"
+                          label='Processando ...'
+                          type='button'
+                          onClick={handleStripePayment}
+                          className='btn-block btn-primary w-15rem mx-auto py-3 mt-4'
+                        />
+                        :
+                        <Button
+                          icon="pi pi-credit-card"
+                          severity="primary"
+                          label='Realizar Pagamento'
+                          type='button'
+                          onClick={(e)=> handleStripePayment(e)}
+                          className='btn-block btn-primary w-15rem mx-auto py-3 mt-4'
+                        />
+                    }
+                  </div>
+                </form>
               </section>
             </div>
           </div>
