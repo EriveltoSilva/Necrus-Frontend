@@ -74,6 +74,12 @@ function Checkout() {
     .then((resp) => resp.data).then((resp)=>{
       console.log(resp);
       let url = '';
+      
+      if(resp.status =='warning'){
+        toastAlert.current.show({ severity: 'info', summary: 'Pagamento💸', detail: `Aviso:${resp.message}` });
+        return ;
+      }
+
       if(resp.status =='success')      
         url=`/checkout/payment-success/${resp.data.order_oid}?session_id=${resp.data.session_id}`
       else

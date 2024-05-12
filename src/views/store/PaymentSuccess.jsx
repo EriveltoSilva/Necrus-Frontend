@@ -86,7 +86,7 @@ function PaymentSuccess() {
             <hr style={{ height: 0, borderTop: '2px dashed #9e9e9e', backgroundColor: 'transparent', opacity: '.75' }} />
             <div className='mt-3'>
               <h2 className='h5 text-center'>Produtos</h2>
-              
+
               <div className='grid  mt-1 '>
                 <div className='col-4 font-bold'>Produto:</div>
                 <div className='col-4 font-bold'>Quantid.</div>
