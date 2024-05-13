@@ -15,6 +15,8 @@ function CategoryBanner() {
             .catch((error) => console.error(error))
     }, [])
 
+    // console.log(categories);
+
     return (
         <>
             <section className="w-full pt-5">
@@ -39,7 +41,7 @@ function CategoryBanner() {
                                     </div>
                                     <div className="flex-fill p-3">
                                         <h6>{ category.title }</h6>
-                                        <small className="text-body">0 produtos</small>
+                                        {/* <small className="text-body">0 produtos</small> */}
                                     </div>
                                 </div>
                             </Link>

@@ -50,7 +50,7 @@ function MyMenuBar() {
     }, [])
 
     const itemRenderer = (item) => (
-        <span className="flex flew-wrap align-items-center p-menuitem-link">
+        <span className="flex flew-wrap align-items-center p-menuitem-link" >
             <Link to={item.url} style={{ textDecoration: 'none' }} className='text-primary'>
                 <span className={item.icon} />
                 <span className="mx-2">{item.label}</span>
@@ -65,12 +65,12 @@ function MyMenuBar() {
         { "label": "Novos Produtos", url: URL_ROUTES.NEW_PRODUCTS, template: itemRenderer },
         { "label": "Destaques", url: URL_ROUTES.HIGHLIGHTS, template: itemRenderer },
         // { "label": "Contactos", url: URL_ROUTES.CONTACTS, template: itemRenderer },
-        {
-            "label": "Outras Secções", "items": [
-                { "label": 'Minha Conta', url: URL_ROUTES.CUSTOMER_ACCOUNT },
-                { "label": 'Sobre Nós', url: URL_ROUTES.ABOUT_US },
-                { "label": 'Faqs', url: URL_ROUTES.FAQS }], template: itemRenderer
-        },
+        // {
+        //     "label": "Outras Secções", "items": [
+        //         { "label": 'Minha Conta', url: URL_ROUTES.CUSTOMER_ACCOUNT },
+        //         { "label": 'Sobre Nós', url: URL_ROUTES.ABOUT_US },
+        //         { "label": 'Faqs', url: URL_ROUTES.FAQS }], template: itemRenderer
+        // },
         { "label": "Carrinho", icon: "pi pi-shopping-cart", url: URL_ROUTES.GO_TO_CART, badge: cartCount, template: itemRenderer },
         // { "label": "Favoritos", icon: "pi pi-heart", url: URL_ROUTES.WISHLIST, badge: 0, template: itemRenderer },
     ];

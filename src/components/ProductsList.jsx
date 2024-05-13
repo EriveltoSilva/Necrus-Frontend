@@ -130,7 +130,7 @@ function ProductsList({ title, products }) {
             <Toast ref={toastAlert} />
             <section className="w-full pt-5 pb-3">
                 <h1 className="section-title position-relative xl:mx-5 mb-4">
-                    <span className="bg-secondary pr-3">
+                    <span className=" pr-3">
                         {title}
                     </span>
                 </h1>

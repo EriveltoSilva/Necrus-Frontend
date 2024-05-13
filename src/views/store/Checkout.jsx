@@ -102,12 +102,12 @@ function Checkout() {
       <Toast ref={toastAlert} />
       <CustomBreadCrumb items={['Necrus', 'loja', 'Checkout']} />
       <div className="w-full p-5">
-        <div className="row xl:px-5">
+        <div className="grid xl:px-5">
           <div className="col-12 lg:col-8">
             <h2 className="h5 text-uppercase mb-3">Endereço</h2>
             <div className="bg-light p-5 mb-5">
 
-              <div className="row">
+              <div className="grid">
                 <div className="md:col-12 flex flex-column gap-2">
                   <label htmlFor="fullName">Nome Completo</label>
                   <InputText id="fullName" readOnly value={order?.full_name || ''} aria-describedby="fullNameHelp" placeholder='Ex: Fulano' />
