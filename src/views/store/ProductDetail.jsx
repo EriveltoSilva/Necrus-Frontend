@@ -16,6 +16,8 @@ import { FloatLabel } from 'primereact/floatlabel';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { InputTextarea } from 'primereact/inputtextarea';
 
+import moment from 'moment'
+
 function ProductDetail() {
     const [product, setProduct] = useState({});
     const [galleryImages, setGalleryImages] = useState([]);
@@ -36,10 +38,42 @@ function ProductDetail() {
     const toastAlert = useRef(null)
     const [activeIndex, setActiveIndex] = useState(0);
 
+
     /** UTILITIES FUNCTIONS */
     const currentAddress = GetCurrentAddress()
     const userData = UserData();
     const cartId = CartID();
+
+    useEffect(() => {
+        fetchProductDetailData();
+    }, [])
+
+
+    useEffect(() => {
+        if (product?.id)
+            fetchReviewData();
+    }, [product])
+
+
+
+    const fetchProductDetailData = async () => {
+        await apiInstance.get(`products/detail/${params.slug}/`)
+            .then((resp) => {
+                setProduct(resp.data);
+                setGalleryImages(resp.data?.gallery);
+                setSizes(resp.data?.size);
+                setColors(resp.data?.color);
+                setSpecifications(resp.data?.specification);
+            })
+            .catch((error) => console.error(error))
+    }
+
+    const fetchReviewData = async () => {
+        await apiInstance.get(`reviews/${product?.id}/`).then((resp) => resp.data)
+            .then((resp) => {
+                setReviews(resp)
+            }).catch((error) => console.error(error))
+    }
 
     const isFieldsValid = () => {
         if (!color) {
@@ -76,14 +110,14 @@ function ProductDetail() {
             formData.append("size", size);
             formData.append("color", color);
             formData.append("quantity", quantity);
-            
+
             formData.append("country", currentAddress?.country.toUpperCase());
             formData.append("user_id", userData?.user_id);
             formData.append("cart_id", cartId);
 
             const response = await apiInstance.post(`cart/`, formData);
             console.log(response);
-            toastAlert.current.show({ severity: 'success', summary: 'Formulario!', detail: "Os dados foram submetidos!"});
+            toastAlert.current.show({ severity: 'success', summary: 'Formulario!', detail: "Os dados foram submetidos!" });
         } catch (error) {
             console.error(error);
         }
@@ -94,21 +128,11 @@ function ProductDetail() {
         toastAlert.current.show({ severity: 'error', summary: 'Avaliação!', detail: "Dados de avaliação a serem submetidos" })
     }
 
-    useEffect(() => {
-        apiInstance.get(`products/detail/${params.slug}/`)
-            .then((resp) => {
-                setProduct(resp.data);
-                setGalleryImages(resp.data?.gallery);
-                setSizes(resp.data?.size);
-                setColors(resp.data?.color);
-                setSpecifications(resp.data?.specification);
-                setReviews(resp.data?.review);
-            })
-            .catch((error) => console.error(error))
-    }, [])
+
+
 
     // useEffect(()=> console.log(color, size, quantity), [color, size, quantity]);
-
+    console.log(reviews);
     const responsiveOptions = [
         { breakpoint: '991px', numVisible: 4 },
         { breakpoint: '767px', numVisible: 3 },
@@ -272,15 +296,57 @@ function ProductDetail() {
                                             {
                                                 reviews?.map((review, index) => (
                                                     <div key={review.id} className="media mb-4">
-                                                        <img src={review?.user?.profile?.image} alt={`${review?.user?.full_name}`} className="w-full mr-3 mt-1" style={{ width: "45px" }} />
+                                                        <img src={review?.profile?.image} alt={`${review?.user?.full_name}`} className="mr-3 mt-1" style={{ width: "45px" }} />
                                                         <div className="media-body">
-                                                            <h6>{review?.user?.full_name}<small> - <i>{review?.created_at}</i></small></h6>
+                                                            <h6>{review?.user?.full_name}<small> - {moment(review?.created_at).format("DD-MM-YYYY")}</small></h6>
                                                             <div className="text-primary mb-2">
-                                                                <i className="fas fa-star"></i>
-                                                                <i className="fas fa-star"></i>
-                                                                <i className="fas fa-star"></i>
-                                                                <i className="far fa-star"></i>
-                                                                <i className="fas fa-star-half"></i>
+                                                                {review.rating == 1 &&
+                                                                    <>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star"></i>
+                                                                        <i className="pi pi-star"></i>
+                                                                        <i className="pi pi-star"></i>
+                                                                        <i className="pi pi-star"></i>
+                                                                    </>
+                                                                }
+
+                                                                {review.rating == 2 &&
+                                                                    <>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star"></i>
+                                                                        <i className="pi pi-star"></i>
+                                                                        <i className="pi pi-star"></i>
+                                                                    </>
+                                                                }
+
+                                                                {review.rating == 3 &&
+                                                                    <>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star"></i>
+                                                                        <i className="pi pi-star"></i>
+                                                                    </>
+                                                                }
+                                                                {review.rating == 4 &&
+                                                                    <>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star"></i>
+                                                                    </>
+                                                                }
+                                                                {review.rating == 5 &&
+                                                                    <>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                        <i className="pi pi-star-fill"></i>
+                                                                    </>
+                                                                }
                                                             </div>
                                                             <p>{review?.review}</p>
                                                         </div>
