@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import CartID from '../../plugin/CartID';
+import CartID from '../plugin/CartID';
 import apiInstance from '../../utils/axios';
-import UserData from '../../plugin/UserData';
+import UserData from '../plugin/UserData';
 import { URL_ROUTES } from '../../utils/constants';
 
 import CustomBreadCrumb from '../../components/CustomBreadCrumb';

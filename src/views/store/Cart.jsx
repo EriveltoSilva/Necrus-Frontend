@@ -1,22 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { URL_ROUTES } from '../../utils/constants';
 import apiInstance from '../../utils/axios';
-import CartID from '../../plugin/CartID';
-import UserData from '../../plugin/UserData';
-import GetCurrentAddress from '../../plugin/UserCountry';
+import CartID from '../plugin/CartID';
+import UserData from '../plugin/UserData';
+import GetCurrentAddress from '../plugin/UserCountry';
+import { CartContext } from '../plugin/Context';
 
 import CustomBreadCrumb from '../../components/CustomBreadCrumb';
 
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
 import { InputNumber } from 'primereact/inputnumber';
-import { RadioButton } from 'primereact/radiobutton';
 import { InputText } from 'primereact/inputtext';
 import { InputMask } from 'primereact/inputmask';
 import { Dropdown } from 'primereact/dropdown';
-import { Image } from 'primereact/image';
 
 import AddresImage from '../../assets/img/address.png'
 
@@ -28,6 +26,7 @@ function Cart() {
 
     const [cart, setCart] = useState([]);
     const [cartTotal, setCartTotal] = useState([]);
+    const [cartCount, setCartCount] = useContext(CartContext)
 
     const [quantity, setQuantity] = useState(1);
     const [productQuantities, setProductQuantities] = useState({})
@@ -70,7 +69,10 @@ function Cart() {
         let url = userId ? `cart-list/${cartId}/${userId}/` : `cart-list/${cartId}/`;
         apiInstance.get(url)
             .then(resp => resp.data)
-            .then(resp => setCart(resp));
+            .then(resp => {
+                setCart(resp);
+                setCartCount(resp.length)
+            });
     }
 
     const fetchCartTotal = (cartId, userId) => {

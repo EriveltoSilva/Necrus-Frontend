@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import apiInstance from '../../utils/axios';
-import GetCurrentAddress from '../../plugin/UserCountry';
-import UserData from '../../plugin/UserData';
-import CartID from '../../plugin/CartID';
+import GetCurrentAddress from '../plugin/UserCountry';
+import UserData from '../plugin/UserData';
+import CartID from '../plugin/CartID';
+import { CartContext } from '../plugin/Context';
 
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
@@ -35,6 +36,8 @@ function ProductDetail() {
     const params = useParams()
     const toastAlert = useRef(null)
     const [activeIndex, setActiveIndex] = useState(0);
+
+    const [cartCount, setCartCount] = useContext(CartContext);
 
     /** UTILITIES FUNCTIONS */
     const currentAddress = GetCurrentAddress()
@@ -138,9 +141,19 @@ function ProductDetail() {
             formData.append("user_id", userData?.user_id);
             formData.append("cart_id", cartId);
 
-            const response = await apiInstance.post(`cart/`, formData);
-            console.log(response);
+            await apiInstance.post(`cart/`, formData);
+
+            // Fetch cart data
+            let url = userData ? `cart-list/${cartId}/${userData?.user_id}/` : `cart-list/${cartId}/`;
+            await apiInstance.get(url).then((resp) => {
+                setCartCount(resp.data.length);
+            }).catch((error) => {
+                console.error(error);
+            });
+
             toastAlert.current.show({ severity: 'success', summary: 'Formulario!', detail: "Os dados foram submetidos!" });
+
+
         } catch (error) {
             console.error(error);
         }
@@ -155,12 +168,12 @@ function ProductDetail() {
             formData.append("review", createdReview.review);
             formData.append("rating", createdReview.rating);
             await apiInstance.post(`reviews/${product?.id}/`, formData)
-            .then((resp) => {
-                toastAlert.current.show({ severity: resp.data.status, summary: 'Avaliação de Produto⭐!', detail: resp.data.message })
-                fetchReviewData();
-            }).catch((error) => {
-                console.error(error);
-            });
+                .then((resp) => {
+                    toastAlert.current.show({ severity: resp.data.status, summary: 'Avaliação de Produto⭐!', detail: resp.data.message })
+                    fetchReviewData();
+                }).catch((error) => {
+                    console.error(error);
+                });
         }
     }
 

@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import { URL_ROUTES } from '../utils/constants';
 import { useAuthStore } from '../store/auth';
 import { setUser } from '../utils/auth';
+import { CartContext } from '../views/plugin/Context';
 
 import ImageLogo from '../components/ImageLogo';
 import MyMenuBar from '../components/bug/MyMenuBar';
 import CategorySelector from '../components/CategorySelector';
+
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
@@ -20,12 +22,14 @@ function Header() {
         state.user,
     ]);
 
-    useEffect(()=>{
+    const [cartCount, setCartCount] = useContext(CartContext);
+
+    useEffect(() => {
         setUser();
         // console.log(isLoggedIn());
         // console.log(user().username);
-    },[])
-    
+    }, [])
+
 
 
 
@@ -52,12 +56,12 @@ function Header() {
                                     <Link to={URL_ROUTES.HIGHLIGHTS} className="nav-item nav-link">Destaques</Link>
                                     <Link to={URL_ROUTES.CONTACTS} className="nav-item nav-link">Contactos</Link>
                                     <div className="nav-item dropdown">
-                                        <span  className="nav-link dropdown-toggle" data-toggle="dropdown">Outras Secções
+                                        <span className="nav-link dropdown-toggle" data-toggle="dropdown">Outras Secções
                                             <i className="bi bi-chevron-down mt-1"></i>
                                         </span>
                                         <div className="dropdown-menu my-bg-primary rounded-0 border-0 m-0">
                                             <Link to={URL_ROUTES.ABOUT_US} className="dropdown-item">Sobre nós</Link>
-                                            <Link to={URL_ROUTES.FAQS}className="dropdown-item">Faqs</Link>
+                                            <Link to={URL_ROUTES.FAQS} className="dropdown-item">Faqs</Link>
                                         </div>
                                     </div>
                                 </div>
@@ -68,7 +72,7 @@ function Header() {
                                     </Link>
                                     <Link to={URL_ROUTES.GO_TO_CART} className="btn px-0 ml-3">
                                         <i className="pi pi-shopping-cart my-text-primary"></i>
-                                        <span className="badge text-secondary border border-secondary rounded-circle" style={{ paddingBottom: "2px" }}>99</span>
+                                        <span className="badge text-secondary border border-secondary rounded-circle" style={{ paddingBottom: "2px" }}>{cartCount}</span>
                                     </Link>
                                 </div>
                             </div>

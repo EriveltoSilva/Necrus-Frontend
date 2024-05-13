@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import CartID from '../plugin/CartID';
+import CartID from '../views/plugin/CartID';
 import apiInstance from '../utils/axios';
-import UserData from '../plugin/UserData';
-import GetCurrentAddress from '../plugin/UserCountry';
+import UserData from '../views/plugin/UserData';
+import GetCurrentAddress from '../views/plugin/UserCountry';
+import { CartContext } from '../views/plugin/Context';
 
 import { Card } from 'primereact/card';
 import { Image } from 'primereact/image';
@@ -21,6 +22,7 @@ function ProductsList({ title, products }) {
     const currentAddress = GetCurrentAddress()
     const userData = UserData();
     const cartId = CartID();
+    const [cartCount, setCartCount] = useContext(CartContext);
 
     const [visible, setVisible] = useState(false);
 
@@ -86,8 +88,15 @@ function ProductsList({ title, products }) {
             formData.append("user_id", userData?.user_id);
             formData.append("cart_id", cartId);
 
-            const response = await apiInstance.post(`cart/`, formData);
-            console.log(response);
+            await apiInstance.post(`cart/`, formData);
+
+            // Fetch cart data
+            let url = userData ? `cart-list/${cartId}/${userData?.user_id}/` : `cart-list/${cartId}/`;
+            await apiInstance.get(url).then((resp) => {
+                setCartCount(resp.data.length);
+            }).catch((error) => {
+                console.error(error);
+            });
             toastAlert.current.show({ severity: 'success', summary: 'Formulario!', detail: "Os dados foram submetidos!"});
         } catch (error) {
             console.error(error);
@@ -114,8 +123,6 @@ function ProductsList({ title, products }) {
         setVisible(true);
     }
     
-    console.log(products);
-
     return (
         <>
             <Toast ref={toastAlert} />

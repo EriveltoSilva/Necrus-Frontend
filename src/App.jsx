@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 // General Components
@@ -18,21 +18,23 @@ import ForgotPassword from "./views/auth/ForgotPassword";
 import CreatePassword from "./views/auth/CreatePassword";
 
 // Store Components
+import Search from "./store/Search";
 import Faqs from './views/store/Faqs';
 import Home from "./views/store/Home";
 import AboutUs from './views/store/AboutUs';
 import Contact from './views/store/Contact';
+import Wishlist from "./views/store/Wishlist";
 import Products from './views/store/Products';
 import Highlight from './views/store/Highlight';
 import Dashboard from "./views/store/Dashboard";
 import ProductDetail from "./views/store/ProductDetail";
-import ProductFromCategory from './views/store/ProductFromCategory';
-import PaymentSuccess from "./views/store/PaymentSuccess";
 import PaymentFailed from "./views/store/PaymentFailed";
-import Search from "./store/Search";
+import PaymentSuccess from "./views/store/PaymentSuccess";
+import ProductFromCategory from './views/store/ProductFromCategory';
 
 import Cart from "./views/store/Cart";
 import Checkout from "./views/store/Checkout";
+import { CartContext } from "./views/plugin/Context";
 
 //  Libraries and assets imports
 import "primereact/resources/themes/lara-light-cyan/theme.css";
@@ -42,49 +44,69 @@ import 'primeflex/primeflex.css';
 import './App.css'
 
 import { URL_ROUTES } from "./utils/constants";
-import Wishlist from "./views/store/Wishlist";
+import apiInstance from './utils/axios';
+import CartID from './views/plugin/CartID';
+import UserData from './views/plugin/UserData';
 
 function App() {
+    const [count, setCount] = useState(0);
+    const [cartCount, setCartCount] = useState(0);
+    const cartId = CartID(); 
+    const userData = UserData(); 
+
+
+    useEffect(()=>{
+        let url = userData ? `cart-list/${cartId}/${userData?.user_id}/` : `cart-list/${cartId}/`;
+        apiInstance.get(url).then((resp)=>{
+            setCartCount(resp.data.length);
+        }).catch((error)=>{
+            console.error(error);
+        });
+    },[])
+
+    
+
     return (
-        <BrowserRouter>
+        <CartContext.Provider value={[cartCount, setCartCount]}>
+            <BrowserRouter>
+                <Topbar />
+                <Header />
+                <MainWrapper>
+                    <Routes>
+                        {/* <Route path={"/private"} element={<PrivateRouter></PrivateRouter>} /> */}
 
-            <Topbar />
-            <Header />
-            <MainWrapper>
-                <Routes>
-                    {/* <Route path={"/private"} element={<PrivateRouter></PrivateRouter>} /> */}
+                        {/* User Authentication  Components */}
+                        <Route path={URL_ROUTES.LOGIN} element={<Login />} />
+                        <Route path={URL_ROUTES.LOGOUT} element={<Logout />} />
+                        <Route path={URL_ROUTES.REGISTER} element={<Register />} />
+                        <Route path={URL_ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
+                        <Route path={URL_ROUTES.CREATE_NEW_PASSWORD} element={< CreatePassword />} />
 
-                    {/* User Authentication  Components */}
-                    <Route path={URL_ROUTES.LOGIN} element={<Login />} />
-                    <Route path={URL_ROUTES.LOGOUT} element={<Logout />} />
-                    <Route path={URL_ROUTES.REGISTER} element={<Register />} />
-                    <Route path={URL_ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
-                    <Route path={URL_ROUTES.CREATE_NEW_PASSWORD} element={< CreatePassword />} />
-
-                    {/* Necrus Components */}
-                    <Route path={URL_ROUTES.FAQS} element={<Faqs />} />
-                    <Route path={URL_ROUTES.ABOUT_US} element={<AboutUs />} />
-                    <Route path={URL_ROUTES.CONTACTS} element={<Contact />} />
+                        {/* Necrus Components */}
+                        <Route path={URL_ROUTES.FAQS} element={<Faqs />} />
+                        <Route path={URL_ROUTES.ABOUT_US} element={<AboutUs />} />
+                        <Route path={URL_ROUTES.CONTACTS} element={<Contact />} />
 
 
-                    {/* Store Components */}
-                    <Route path={URL_ROUTES.ROOT} element={<Home />} />
-                    <Route path={URL_ROUTES.CHECKOUT} element={<Checkout />} />
-                    <Route path={URL_ROUTES.DASHBOARD} element={<Dashboard />} />
-                    <Route path={URL_ROUTES.PRODUCTS} element={<Products />} />
-                    <Route path={URL_ROUTES.HIGHLIGHTS} element={<Highlight />} />
-                    <Route path={URL_ROUTES.WISHLIST} element={<Wishlist />} />
-                    <Route path={URL_ROUTES.GO_TO_CART} element={<Cart />} />
-                    <Route path={URL_ROUTES.PRODUCT_DETAIL} element={<ProductDetail />} />
-                    <Route path={URL_ROUTES.PRODUCTS_BY_CATEGORY} element={<ProductFromCategory />} />
-                    <Route path={URL_ROUTES.PAYMENT_SUCCESS} element={<PaymentSuccess />} />
-                    <Route path={URL_ROUTES.PAYMENT_FAILED} element={<PaymentFailed />} />
-                    <Route path={URL_ROUTES.SEARCH} element={<Search />} />
-                </Routes>
-            </MainWrapper>
+                        {/* Store Components */}
+                        <Route path={URL_ROUTES.ROOT} element={<Home />} />
+                        <Route path={URL_ROUTES.CHECKOUT} element={<Checkout />} />
+                        <Route path={URL_ROUTES.DASHBOARD} element={<Dashboard />} />
+                        <Route path={URL_ROUTES.PRODUCTS} element={<Products />} />
+                        <Route path={URL_ROUTES.HIGHLIGHTS} element={<Highlight />} />
+                        <Route path={URL_ROUTES.WISHLIST} element={<Wishlist />} />
+                        <Route path={URL_ROUTES.GO_TO_CART} element={<Cart />} />
+                        <Route path={URL_ROUTES.PRODUCT_DETAIL} element={<ProductDetail />} />
+                        <Route path={URL_ROUTES.PRODUCTS_BY_CATEGORY} element={<ProductFromCategory />} />
+                        <Route path={URL_ROUTES.PAYMENT_SUCCESS} element={<PaymentSuccess />} />
+                        <Route path={URL_ROUTES.PAYMENT_FAILED} element={<PaymentFailed />} />
+                        <Route path={URL_ROUTES.SEARCH} element={<Search />} />
+                    </Routes>
+                </MainWrapper>
 
-            <Footer />
-        </BrowserRouter>
+                <Footer />
+            </BrowserRouter>
+        </CartContext.Provider>
 
     )
 }
