@@ -15,6 +15,7 @@ export const URL_ROUTES = {
     "DASHBOARD":"/dashboard/",
     "PRODUCT_DETAIL":"/products/detail/:slug/",
     "PRODUCTS_BY_CATEGORY":"/products/category/list/:slug/",
+    "NEW_PRODUCTS":"/products/news",
     "PRODUCTS":"/products/",
     "HIGHLIGHTS":"/highlights/",
     "CONTACTS":"/contacts/",
@@ -27,5 +28,7 @@ export const URL_ROUTES = {
     "CHECKOUT": "/checkout/:order_oid/",
     "PAYMENT_SUCCESS":'/checkout/payment-success/:order_oid/',
     "PAYMENT_FAILED":'/checkout/payment-failed/:order_oid/',
-    "SEARCH":'/search'
+    "SEARCH":'/search',
+
+    "CUSTOMER_ACCOUNT": '/customer/account',
 }

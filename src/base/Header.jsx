@@ -11,8 +11,8 @@ import MyMenuBar from '../components/bug/MyMenuBar';
 import CategorySelector from '../components/CategorySelector';
 
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/js/bootstrap.bundle.min";
 
 
 function Header() {
@@ -35,13 +35,15 @@ function Header() {
 
     return (
         <>
-            <header className="container-fluid bg-dark mb-3">
+        <MyMenuBar></MyMenuBar>
+            {/* <header className="container-fluid bg-dark mb-3">
                 <div className="row px-xl-5">
                     <div className="col-lg-3 d-none d-lg-block text-center">
                         <CategorySelector />
                     </div>
 
                     <div className="col-lg-9">
+                        
                         <nav className="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
                             <Link to={URL_ROUTES.ROOT} className="text-decoration-none welcome d-block d-lg-none">
                                 <ImageLogo />
@@ -79,7 +81,7 @@ function Header() {
                         </nav>
                     </div>
                 </div>
-            </header>
+            </header> */}
         </>
     )
 }

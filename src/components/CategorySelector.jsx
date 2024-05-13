@@ -29,7 +29,7 @@ function CategorySelector() {
                 options={categories}
                 optionLabel="title"
                 placeholder="Categorias"
-                className="w-full  my-bg-primary h-100 flex border-noround "
+                className="w-full  my-bg-primary h-100 flex "
                 // dropdownIcon="pi pi-list"
                 highlightOnSelect={false} 
                  />

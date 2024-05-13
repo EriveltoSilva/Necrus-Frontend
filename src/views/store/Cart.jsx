@@ -18,6 +18,11 @@ import { Dropdown } from 'primereact/dropdown';
 
 import AddresImage from '../../assets/img/address.png'
 
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Tag } from 'primereact/tag';
+
+
 function Cart() {
     const navigate = useNavigate();
     const toastAlert = useRef(null);
@@ -61,7 +66,7 @@ function Cart() {
     }, [cart]);
 
     useEffect(() => {
-        if(cart.length <1)
+        if (cart.length < 1)
             setFormVisibility(false);
     }, [cart]);
 
@@ -77,7 +82,7 @@ function Cart() {
 
     const fetchCartTotal = (cartId, userId) => {
         let url = userId ? `cart-detail/${cartId}/${userId}/` : `cart-detail/${cartId}/`;
-        console.log(userId);
+        // console.log(userId);
         apiInstance.get(url)
             .then(resp => resp.data)
             .then(resp => setCartTotal(resp));
@@ -214,16 +219,16 @@ function Cart() {
             formData.append("address", address);
 
             await apiInstance.post(`create-order/`, formData).then(resp => resp.data)
-            .then((resp) => {
-                toastAlert.current.show({ severity: 'success', summary: 'Ordem de Compra🛍️!', detail: "Carrinho actualizado com Sucesso!👌!" });
-                setTimeout(() => {
-                    navigate(`/checkout/${resp.data.order_oid}/`);
-                }, 2000);
-            })
-            .catch(error => {
-                toastAlert.current.show({ severity: 'error', summary: 'Ordem de Compra🛍️!', detail: "Erro efectuando a ordem de comprea 🚫!" });
-                console.error(error);
-            });
+                .then((resp) => {
+                    toastAlert.current.show({ severity: 'success', summary: 'Ordem de Compra🛍️!', detail: "Carrinho actualizado com Sucesso!👌!" });
+                    setTimeout(() => {
+                        navigate(`/checkout/${resp.data.order_oid}/`);
+                    }, 2000);
+                })
+                .catch(error => {
+                    toastAlert.current.show({ severity: 'error', summary: 'Ordem de Compra🛍️!', detail: "Erro efectuando a ordem de comprea 🚫!" });
+                    console.error(error);
+                });
 
         }
         catch (error) {
@@ -231,8 +236,63 @@ function Cart() {
         }
     }
 
+    const tableHeader = (
+        <div className="flex flex-wrap align-items-center justify-content-between gap-2">
+            <span className="text-xl text-900 font-bold">Produtos</span>
+        </div>
+    );
 
+    const tableFooter = `Total de produtos no carrinho ${cart ? cart.length : 0}.`;
 
+    const imageBodyTemplate = (item) => {
+        return <img src={`${item.product?.image}`} alt={item?.product.title} className="w-6rem shadow-2 border-round" />;
+    };
+    const titleBodyTemplate = (item) => { return `${item?.product?.title}`;};
+    const priceBodyTemplate = (item) => { return `${item?.price}kz`;};
+    const quantityBodyTemplate = (item) => {
+        return (
+            <>
+                <div className='flex flex-wrap'>
+                    
+                    <InputNumber
+                        value={productQuantities[item?.product?.id] || item?.quantity}
+                        showButtons
+                        // incrementButtonIcon="pi pi-plus"
+                        // decrementButtonIcon="pi pi-minus"
+                        onValueChange={(e) => handleQuantityChange(e, item?.product?.id)}
+                    // decrementButtonClassName="p-button-primary"
+                    // incrementButtonClassName="p-button-primary"
+                    // className='w-5'
+                    style={{width:""}}
+                    />
+
+                    <Button
+                        rounded
+                        icon="pi pi-save"
+                        severity="primary"
+                        aria-label="Salvar"
+                        type='button'
+                        className='ml-1 btn  border-round'
+                        onClick={(e) => updateCart(item?.product, item?.size, item?.color)}
+                    />
+                </div>
+            </>
+        )
+    };
+    const actionButtonBodyTemplate = (item) => {
+        return (
+            <>
+                <Button
+                    icon="pi pi-trash"
+                    severity="primary"
+                    type='submit'
+                    className='btn-danger'
+                    onClick={(e) => handleDeleteCartItem(e, item?.id)}
+                />
+            </>
+        )
+    };
+    
 
 
     return (
@@ -243,9 +303,19 @@ function Cart() {
 
                 {/* <!-- Cart Start --> */}
                 <div className="w-full">
-                    <div className="row">
+                    <div className="grid mt-2">
                         <div className="col-12 xl:col-8 table-responsive mb-5">
-                            <table className="table table-light table-borderless table-hover text-center mb-0">
+                            <div className="card">
+                                <DataTable value={cart} header={tableHeader} footer={tableFooter} tableStyle={{ minWidth: '60rem' }}>
+                                    <Column header="Image" body={imageBodyTemplate}></Column>
+                                    <Column field="title" header="Produto" body={titleBodyTemplate}></Column>
+                                    <Column field="price" header="Preço" body={priceBodyTemplate}></Column>
+                                    <Column field="quantity" header="Quantidade"  body={quantityBodyTemplate}></Column>
+                                    <Column field="total" header="Total"></Column>
+                                    <Column field="remove" header="Remover" body={actionButtonBodyTemplate}></Column>
+                                </DataTable>
+                            </div>
+                            {/* <table className="table table-light table-borderless table-hover text-center mb-0">
                                 <thead className="thead-dark">
                                     <tr>
                                         <th>Imagem</th>
@@ -257,7 +327,6 @@ function Cart() {
                                     </tr>
                                 </thead>
                                 <tbody className="align-middle">
-                                    {/* {% for item in items %} */}
 
                                     {cart?.map((item, index) => (
                                         <tr key={index}>
@@ -275,25 +344,6 @@ function Cart() {
 
                                             <td className="align-middle">
                                                 <div className='flex'>
-                                                    {/* <Button
-                                                        icon="pi pi-minus"
-                                                        severity="primary"
-                                                        type='submit'
-                                                        className='btn-primary px-4'
-                                                        onClick={(e) => setQuantity((quantity) => { return ((--quantity < 1) ? 1 : quantity) })}
-                                                    />
-
-                                                    <Button label={item?.quantity} severity="info" text disabled className='w-8rem' />
-
-                                                    <Button
-                                                        icon="pi pi-plus"
-                                                        severity="primary"
-                                                        type='submit'
-                                                        className='btn-primary px-4'
-                                                        onClick={(e) => setQuantity(quantity + 1)}
-                                                    /> */}
-
-
                                                     <InputNumber
                                                         value={productQuantities[item?.product?.id] || item?.quantity}
                                                         showButtons
@@ -342,7 +392,7 @@ function Cart() {
                                         </tr>
                                     }
                                 </tbody>
-                            </table>
+                            </table> */}
                         </div>
                         <div className="col-12 xl:col-4">
                             <h2 className="h5 section-title position-relative text-uppercase mb-3">
@@ -395,47 +445,47 @@ function Cart() {
                 {formVisibility &&
 
                     <section className='w-full' id="sectionPersonalData">
-                        <div className="row">
-                            <div className="lg:col-6 card p-5">
+                        <div className="grid">
+                            <div className="lg:col-6 p-5" >
                                 <h5 className="text-uppercase">
                                     <span className="bg-secondary pr-3">Dados Pessoais e Endereço</span>
                                 </h5>
                                 <div className="bg-light p-5 mb-5">
-                                    <div className="row">
-                                        <div className="md:col-12 flex flex-column gap-2">
-                                            <label htmlFor="fullName">Nome Completo</label>
+                                    <div className="grid">
+                                        <div className="md:col-12 col-12 flex flex-column gap-2">
+                                            <label htmlFor="fullName" className="font-bold">Nome Completo</label>
                                             <InputText id="fullName" onChange={(e) => setFullName(e.target.value)} aria-describedby="fullNameHelp" placeholder='Ex: Fulano' />
                                             <small id="fullNameHelp"></small>
                                         </div>
 
-                                        <div className="md:col-6 flex flex-column gap-2">
-                                            <label htmlFor="email">E-mail</label>
+                                        <div className="md:col-6 col-12 flex flex-column gap-2">
+                                            <label htmlFor="email" className="font-bold">E-mail</label>
                                             <InputText type='email' id="email" onChange={(e) => setEmail(e.target.value)} aria-describedby="emailHelp" placeholder='Ex: fulano@necrus.com' />
                                             <small id="emailHelp"></small>
                                         </div>
 
-                                        <div className="md:col-6 flex flex-column gap-2">
-                                            <label htmlFor="phone" className="font-bold block mb-2">Nº de Telefone</label>
+                                        <div className="md:col-6 col-12 flex flex-column gap-2">
+                                            <label htmlFor="phone" className="font-bold">Nº de Telefone</label>
                                             <InputMask id="phone" mask="999-999-999" onChange={(e) => setPhone(e.target.value)} placeholder="940-811-141"></InputMask>
                                             <small id="phoneHelp"></small>
                                         </div>
 
 
 
-                                        <div className="md:col-6 flex flex-column gap-2">
-                                            <label htmlFor="country">País</label>
+                                        <div className="md:col-6 col-12 flex flex-column gap-2">
+                                            <label htmlFor="country" className="font-bold">País</label>
                                             <InputText id="country" readOnly value={country} aria-describedby="countryHelp" placeholder='Ex: Angola, Portugal...' />
                                             <small id="countryHelp"></small>
                                         </div>
 
-                                        <div className="md:col-6 flex flex-column gap-2">
-                                            <label htmlFor="province">Provincia</label>
+                                        <div className="md:col-6 col-12 flex flex-column gap-2">
+                                            <label htmlFor="province" className="font-bold">Provincia</label>
                                             <Dropdown filter value={selectedProvince} onChange={(e) => setSelectedProvince(e.value)} options={cities} optionLabel="name" placeholder="Selecione a provincia" className="w-full" />
                                             <small id="provinceHelp"></small>
                                         </div>
 
-                                        <div className="md:col-6 flex flex-column gap-2">
-                                            <label htmlFor="address">Endereço</label>
+                                        <div className="md:col-12 col-12 flex flex-column gap-2">
+                                            <label htmlFor="address" className="font-bold">Endereço</label>
                                             <InputText id="address" aria-describedby="addressHelp" onChange={(e) => setAddress(e.target.value)} placeholder='Ex: Angola, Luanda, Rangel, Rua Rubra, Casa nº 21' />
                                             <small id="addressHelp"></small>
                                         </div>
@@ -453,7 +503,7 @@ function Cart() {
                                     </div>
                                 </div>
                             </div>
-                            <div className='lg:col-6 col-12'>
+                            <div className='lg:col-6 lg:mt-6 ' style={{ height: '100%' }}>
                                 <img
                                     src={AddresImage}
                                     alt={`Necrus - Address`}
@@ -469,5 +519,6 @@ function Cart() {
         </>
     );
 }
+
 
 export default Cart

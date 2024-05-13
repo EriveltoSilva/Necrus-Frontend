@@ -31,6 +31,10 @@ import ProductDetail from "./views/store/ProductDetail";
 import PaymentFailed from "./views/store/PaymentFailed";
 import PaymentSuccess from "./views/store/PaymentSuccess";
 import ProductFromCategory from './views/store/ProductFromCategory';
+import NewProducts from "./views/store/NewProducts";
+
+// Customers Components
+import Account from "./views/custumer/Account";
 
 import Cart from "./views/store/Cart";
 import Checkout from "./views/store/Checkout";
@@ -93,6 +97,7 @@ function App() {
                         <Route path={URL_ROUTES.CHECKOUT} element={<Checkout />} />
                         <Route path={URL_ROUTES.DASHBOARD} element={<Dashboard />} />
                         <Route path={URL_ROUTES.PRODUCTS} element={<Products />} />
+                        <Route path={URL_ROUTES.NEW_PRODUCTS} element={<NewProducts />} />
                         <Route path={URL_ROUTES.HIGHLIGHTS} element={<Highlight />} />
                         <Route path={URL_ROUTES.WISHLIST} element={<Wishlist />} />
                         <Route path={URL_ROUTES.GO_TO_CART} element={<Cart />} />
@@ -101,6 +106,11 @@ function App() {
                         <Route path={URL_ROUTES.PAYMENT_SUCCESS} element={<PaymentSuccess />} />
                         <Route path={URL_ROUTES.PAYMENT_FAILED} element={<PaymentFailed />} />
                         <Route path={URL_ROUTES.SEARCH} element={<Search />} />
+
+                        {/* Customers Components */}
+                        <Route path={URL_ROUTES.CUSTOMER_ACCOUNT} element={<Account />} />
+                        <Route path={URL_ROUTES.CUSTOMER_ACCOUNT} element={<Account />} />
+
                     </Routes>
                 </MainWrapper>
 

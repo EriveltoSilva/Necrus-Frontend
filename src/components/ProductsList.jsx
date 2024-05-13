@@ -190,11 +190,11 @@ function ProductsList({ title, products }) {
 
                     <Dialog visible={visible} modal header={headerElement} footer={footerContent} style={{ width: '50rem' }} onHide={() => setVisible(false)}>
                         <div className='p-5'>
-                            <div className='row justify-content-between'>
+                            <div className='grid justify-content-between'>
                                 <div className="mb-3">
                                     <strong className="text-dark mr-3">Tamanhos:</strong>
                                     <span>{size}</span>
-                                    <div className='flex mt-3'>
+                                    <div className='flex flex-wrap mt-3'>
                                         {sizes?.map((size) => (
                                             <div key={size.id} className="custom-control custom-radio custom-control-inline">
                                                 <input type="radio" className="custom-control-input" id={`size-${size.id}`} name="size" value={size.name} onClick={(e) => setSize(e.target.value)} />
