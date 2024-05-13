@@ -10,13 +10,13 @@ import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { Galleria } from 'primereact/galleria';
-import { InputText } from 'primereact/inputtext';
+import { Dropdown } from 'primereact/dropdown';
 import { DataTable } from 'primereact/datatable';
-import { FloatLabel } from 'primereact/floatlabel';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { InputTextarea } from 'primereact/inputtextarea';
 
-import moment from 'moment'
+import moment from 'moment';
+
 
 function ProductDetail() {
     const [product, setProduct] = useState({});
@@ -24,37 +24,40 @@ function ProductDetail() {
     const [sizes, setSizes] = useState([]);
     const [colors, setColors] = useState([]);
     const [specifications, setSpecifications] = useState([]);
-    const [reviews, setReviews] = useState([]);
 
-    const [email, setEmail] = useState("");
-    const [newUserReview, setNewUserReview] = useState("");
+    const [reviews, setReviews] = useState([]);
+    const [createdReview, setCreatedReview] = useState({ review: "", rating: 0 })
 
     const [size, setSize] = useState("");
     const [color, setColor] = useState("");
     const [quantity, setQuantity] = useState(1);
 
-
     const params = useParams()
     const toastAlert = useRef(null)
     const [activeIndex, setActiveIndex] = useState(0);
-
 
     /** UTILITIES FUNCTIONS */
     const currentAddress = GetCurrentAddress()
     const userData = UserData();
     const cartId = CartID();
 
+    const [selectedRating] = useState(null);
+    const ratingsOptions = [
+        { name: "★☆☆☆☆", code: 1 },
+        { name: "★★☆☆☆", code: 2 },
+        { name: "★★★☆☆", code: 3 },
+        { name: "★★★★☆", code: 4 },
+        { name: "★★★★★", code: 5 }
+    ];
+
     useEffect(() => {
         fetchProductDetailData();
     }, [])
-
 
     useEffect(() => {
         if (product?.id)
             fetchReviewData();
     }, [product])
-
-
 
     const fetchProductDetailData = async () => {
         await apiInstance.get(`products/detail/${params.slug}/`)
@@ -75,7 +78,7 @@ function ProductDetail() {
             }).catch((error) => console.error(error))
     }
 
-    const isFieldsValid = () => {
+    const isAddtoCartFieldsValid = () => {
         if (!color) {
             toastAlert.current.show({ severity: 'error', summary: 'Formulario!', detail: "Escolha uma cor para o produto!" });
             return false;
@@ -86,10 +89,30 @@ function ProductDetail() {
         }
         return true;
     }
+    const isReviewFieldsValid = () => {
+        if (!userData?.user_id) {
+            toastAlert.current.show({ severity: 'error', summary: 'Avaliação!', detail: "Você não está logado.Faça login primeiro!" })
+            return false;
+        }
+        if (!product?.id) {
+            toastAlert.current.show({ severity: 'error', summary: 'Avaliação!', detail: "O produto de avaliação não está definido!" })
+            return false;
+        }
+        if (!createdReview.review) {
+            toastAlert.current.show({ severity: 'error', summary: 'Avaliação!', detail: "O campo de texto para avaliação está vazio! Dê um breve comentário sobre o produto.." });
+            return false;
+        }
+        if (!createdReview.rating) {
+            toastAlert.current.show({ severity: 'error', summary: 'Avaliação!', detail: "Selecione o rating da avaliação(estrelas)" });
+            return false;
+        }
+
+        return true;
+    }
 
     const handlerAddtoCart = async (e) => {
         e.preventDefault();
-        if (!isFieldsValid()) return;
+        if (!isAddtoCartFieldsValid()) return;
         // console.log("-----------------------------------------------");
         // console.log("Product ID:", product.id);
         // console.log("PRICE:", product.price);
@@ -123,16 +146,45 @@ function ProductDetail() {
         }
     }
 
-    const handleReviewForm = (e) => {
+    const handleReviewForm = async (e) => {
         e.preventDefault();
-        toastAlert.current.show({ severity: 'error', summary: 'Avaliação!', detail: "Dados de avaliação a serem submetidos" })
+        if (isReviewFieldsValid()) {
+            const formData = new FormData();
+            formData.append("product_id", product?.id);
+            formData.append("user_id", userData?.user_id);
+            formData.append("review", createdReview.review);
+            formData.append("rating", createdReview.rating);
+            await apiInstance.post(`reviews/${product?.id}/`, formData)
+            .then((resp) => {
+                toastAlert.current.show({ severity: resp.data.status, summary: 'Avaliação de Produto⭐!', detail: resp.data.message })
+                fetchReviewData();
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
+    }
+
+    const handleReviewChange = (event) => {
+        if (event.target.name === 'rating') {
+            setCreatedReview({
+                ...createdReview,
+                [event.target.name]: event.target.value.code
+            });
+        }
+        else {
+            setCreatedReview({
+                ...createdReview,
+                [event.target.name]: event.target.value
+            });
+        }
     }
 
 
 
 
+
     // useEffect(()=> console.log(color, size, quantity), [color, size, quantity]);
-    console.log(reviews);
+    // console.log(reviews);
     const responsiveOptions = [
         { breakpoint: '991px', numVisible: 4 },
         { breakpoint: '767px', numVisible: 3 },
@@ -355,7 +407,7 @@ function ProductDetail() {
                                             }
                                         </div>
 
-                                        <div className="md:col-6">
+                                        <div className="md:col-6 shadow p-5">
                                             <h4>Já comprou este producto? Deixe a sua avaliação</h4>
                                             <small>Seu endereço de email será mantido secreto.</small>
                                             <div className="flex mt-3">
@@ -369,36 +421,41 @@ function ProductDetail() {
                                                 </div>
                                             </div>
 
-                                            <form>
-                                                <FloatLabel className="mt-5">
-                                                    <InputText
-                                                        id='email'
-                                                        value={email}
-                                                        onChange={(e) => setEmail(e.target.value)}
-                                                        icon="pi pi-envelope"
-                                                        placeholder="Seu endereço de email"
-                                                        className='w-full'
-                                                    />
-                                                    <label htmlFor="email">E-mail</label>
-                                                </FloatLabel>
 
-                                                <FloatLabel className="mt-5">
+                                            <form>
+                                                <div className="flex flex-column">
+                                                    <label htmlFor="">Classificação:</label>
+                                                    <Dropdown
+                                                        name='rating'
+                                                        value={selectedRating}
+                                                        onChange={(e) => handleReviewChange(e)}
+                                                        options={ratingsOptions}
+                                                        optionLabel="name"
+                                                        placeholder="Dê a sua avaliação do produto"
+                                                        className="w-full"
+                                                    />
+                                                </div>
+
+
+                                                <div className="mt-5">
+                                                    <label htmlFor="review">Sua Avaliação</label>
                                                     <InputTextarea
+                                                        name='review'
                                                         id='review'
-                                                        value={newUserReview}
-                                                        onChange={(e) => setNewUserReview(e.target.value)}
+                                                        value={createdReview.review}
+                                                        onChange={(e) => handleReviewChange(e)}
                                                         rows={5}
                                                         className='w-full'
+                                                        placeholder="Escreva sua avaliação aqui"
                                                         cols={40}
                                                     />
-                                                    <label htmlFor="review">Sua Avaliação</label>
-                                                </FloatLabel>
+                                                </div>
 
                                                 <Button
                                                     icon="pi pi-star"
                                                     label='Avaliar Produto'
                                                     severity="primary"
-                                                    type='submit'
+                                                    type='button'
                                                     className='btn-primary px-3 mt-3'
                                                     onClick={handleReviewForm}
                                                 />
