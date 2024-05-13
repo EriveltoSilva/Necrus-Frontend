@@ -14,7 +14,7 @@ export const URL_ROUTES = {
 
     "DASHBOARD":"/dashboard/",
     "PRODUCT_DETAIL":"/products/detail/:slug/",
-    "PRODUCTS_BY_CATEGORY":"/products/category/list/:slug/",
+    "PRODUCTS_BY_CATEGORY":"/products/category/:slug/",
     "NEW_PRODUCTS":"/products/news",
     "PRODUCTS":"/products/",
     "HIGHLIGHTS":"/highlights/",

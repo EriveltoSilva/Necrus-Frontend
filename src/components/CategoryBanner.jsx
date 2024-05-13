@@ -25,7 +25,7 @@ function CategoryBanner() {
 
                     {categories?.map((category, index) => (
                         <div key={category.id} className="lg:col-3 md:col-4 sm:col-6 pb-1">
-                            <Link className="text-decoration-none" to={""}>
+                            <Link className="text-decoration-none" to={`/products/category/${category?.slug}/`}>
                                 <div className="cart-item flex align-items-center mb-4">
                                     <div className="overflow-hidden" style={{width: "100px", height: "100px"}}>
                                         <Image 

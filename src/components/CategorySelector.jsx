@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import apiInstance from '../utils/axios';
 
@@ -6,18 +7,20 @@ import { Dropdown } from 'primereact/dropdown';
 
 function CategorySelector() {
 
-    const [categories, setCategories] = useState([])
-    const [category, setCategory] = useState(null)
+    const navigate= useNavigate();
 
-    useEffect( ()=>{
+    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState(null);
+
+    useEffect(() => {
         apiInstance.get('categories/')
-        .then(resp => setCategories(resp.data))
-        .catch((error)=> console.error(error))
-    }, [])
+            .then(resp => setCategories(resp.data))
+            .catch((error) => console.error(error))
+    }, []);
 
 
     useEffect(() => {
-        // console.log(category);
+        navigate(`/products/category/${category?.slug}/`);
     }, [category])
 
 
@@ -31,8 +34,9 @@ function CategorySelector() {
                 placeholder="Categorias"
                 className="w-full  my-bg-primary h-100 flex "
                 // dropdownIcon="pi pi-list"
-                highlightOnSelect={false} 
-                 />
+                highlightOnSelect={false}
+            />
+
         </>
     )
 }
