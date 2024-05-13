@@ -29,6 +29,7 @@ import ProductDetail from "./views/store/ProductDetail";
 import ProductFromCategory from './views/store/ProductFromCategory';
 import PaymentSuccess from "./views/store/PaymentSuccess";
 import PaymentFailed from "./views/store/PaymentFailed";
+import Search from "./store/Search";
 
 import Cart from "./views/store/Cart";
 import Checkout from "./views/store/Checkout";
@@ -78,6 +79,7 @@ function App() {
                     <Route path={URL_ROUTES.PRODUCTS_BY_CATEGORY} element={<ProductFromCategory />} />
                     <Route path={URL_ROUTES.PAYMENT_SUCCESS} element={<PaymentSuccess />} />
                     <Route path={URL_ROUTES.PAYMENT_FAILED} element={<PaymentFailed />} />
+                    <Route path={URL_ROUTES.SEARCH} element={<Search />} />
                 </Routes>
             </MainWrapper>
 

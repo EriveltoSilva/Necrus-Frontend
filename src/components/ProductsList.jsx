@@ -114,18 +114,22 @@ function ProductsList({ title, products }) {
         setVisible(true);
     }
     
-    // console.log(products);
+    console.log(products);
 
     return (
         <>
             <Toast ref={toastAlert} />
             <section className="w-full pt-5 pb-3">
-                <h2 className="section-title position-relative text-uppercase xl:mx-5 mb-4">
+                <h1 className="section-title position-relative xl:mx-5 mb-4">
                     <span className="bg-secondary pr-3">
                         {title}
                     </span>
-                </h2>
-                <div className="grid xl:px-5">
+                </h1>
+                {
+                    products.length === 0 ? 
+                    <h2 className='h5 ml-4 text-muted'>Não foram encontrados nenhum produto no nosso banco de dados😢.</h2>
+                    :
+                    <div className="grid xl:px-5">
                     {
                         products?.map((product) => (
                             <Card
@@ -223,6 +227,8 @@ function ProductsList({ title, products }) {
                     </Dialog>
 
                 </div>
+                }
+                
             </section>
         </>
     )

@@ -1,10 +1,13 @@
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
+import ImageLogo from '../components/ImageLogo';
+import apiInstance from '../utils/axios';
+
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { URL_ROUTES } from '../utils/constants';
-import ImageLogo from '../components/ImageLogo';
 import { InputText } from 'primereact/inputtext';
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 
 function Topbar() {
     const navigate = useNavigate()
@@ -16,21 +19,23 @@ function Topbar() {
         { "title": "Registrar", "url": URL_ROUTES.REGISTER },
     ]
 
-    const [searchValue, setSearchValue] = useState("")
-    const [menuOption, setMenuOption] = useState(null)
+    const [searchValue, setSearchValue] = useState("");
+
+    const [menuOption, setMenuOption] = useState(null);
 
     useEffect(() => {
         if (menuOption !== null)
-            navigate(menuOption.url)
+            navigate(menuOption.url);
     }, [menuOption])
 
     const handleSearchForm = (e) => {
         e.preventDefault();
-        // Função de procura
+        console.log("####################333");
+        navigate(`/search?query=${searchValue}`);
     }
 
     return (
-        <div className="w-full ">
+        <div className="w-full">
             <div className="grid bg-secondary lg:justify-content-end  justify-content-center py-1 xl:px-5">
                 <div className="lg:col-6 text-center lg:text-right">
                     <Dropdown
@@ -60,6 +65,8 @@ function Topbar() {
                                 value={searchValue}
                                 onChange={(e) => setSearchValue(e.target.value)}
                                 icon="pi pi-search"
+                                onKeyUp={(e)=>{(e.target.key=="Enter")?handleSearchForm(e):null}}
+
                                 placeholder="Procure por produtos aqui..."
                                 className='w-10'/>
 
