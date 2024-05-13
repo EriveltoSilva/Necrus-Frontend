@@ -57,9 +57,9 @@ function Login() {
       <main id='auth'>
         <Toast ref={toastAlert} />
         <div className="w-8 mx-auto">
-          <div className="grid align-items-center justify-content-center  px-4 sm:px-0">
+          <div className="grid align-items-center justify-content-center px-4 sm:px-0">
             <div className="col sm:col-6 lg:col-7 xl:col-6 text-dark">
-              <Link to={URL_ROUTES.ROOT} className="d-flex justify-content-center mb-4">
+              <Link to={URL_ROUTES.ROOT} className="flex justify-content-center mb-4">
                 <ImageLogo num={2} />
               </Link>
 
@@ -68,8 +68,8 @@ function Login() {
                 <p>Acesse a sua conta</p>
               </div>
 
-              <Button label='Login com o Google' icon="pi pi-google" className="btn btn-lg btn-outline-primary w-full mb-3 border-round" />
-              <Button label='Login com o Facebook' icon="pi pi-facebook" className="btn btn-lg btn-outline-primary w-full mb-3 border-round" />
+              <Button label='Registro com o Google'  disabled icon="pi pi-google" className="btn btn-lg btn-primary w-full mb-3 border-round" />
+              <Button label='Registro com o Facebook' disabled icon="pi pi-facebook" className="btn btn-lg btn-primary w-full mb-3 border-round" />
                 
               <div className="relative">
                 <hr className="text-secondary divider" />

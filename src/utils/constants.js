@@ -23,8 +23,7 @@ export const URL_ROUTES = {
     "FAQS":"/faqs/",
     "WISHLIST":"/wishlist/",
     "GO_TO_CART":"/cart/",
-
-
+    
     "CHECKOUT": "/checkout/:order_oid/",
     "PAYMENT_SUCCESS":'/checkout/payment-success/:order_oid/',
     "PAYMENT_FAILED":'/checkout/payment-failed/:order_oid/',

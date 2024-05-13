@@ -76,8 +76,8 @@ function Register() {
                                 <p>Crie uma conta agora, e compre os melhores items</p>
                             </div>
 
-                            <Button label='Registro com o Google' icon="pi pi-google" className="btn btn-lg btn-outline-primary w-full mb-3 border-round" />
-                            <Button label='Registro com o Facebook' icon="pi pi-facebook" className="btn btn-lg btn-outline-primary w-full mb-3 border-round" />
+                            <Button label='Registro com o Google'  disabled icon="pi pi-google" className="btn btn-lg btn-primary w-full mb-3 border-round" />
+                            <Button label='Registro com o Facebook' disabled icon="pi pi-facebook" className="btn btn-lg btn-primary w-full mb-3 border-round" />
 
                             <div className="relative">
                                 <hr className="text-secondary divider" />
