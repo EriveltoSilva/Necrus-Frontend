@@ -23,6 +23,7 @@ function ProductsList({ title, products }) {
     const userData = UserData();
     const cartId = CartID();
     const [cartCount, setCartCount] = useContext(CartContext);
+    const [country, setCountry] = useState("Angola");
 
     const [visible, setVisible] = useState(false);
 
@@ -84,7 +85,8 @@ function ProductsList({ title, products }) {
             formData.append("color", color);
             formData.append("quantity", quantity);
 
-            formData.append("country", currentAddress?.country.toUpperCase());
+            // formData.append("country", currentAddress?.country.toUpperCase());
+            formData.append("country", country);
             formData.append("user_id", userData?.user_id);
             formData.append("cart_id", cartId);
 
@@ -97,7 +99,7 @@ function ProductsList({ title, products }) {
             }).catch((error) => {
                 console.error(error);
             });
-            toastAlert.current.show({ severity: 'success', summary: 'Formulario!', detail: "Os dados foram submetidos!"});
+            toastAlert.current.show({ severity: 'success', summary: 'Formulario!', detail: "Os dados foram submetidos!" });
         } catch (error) {
             console.error(error);
         }
@@ -106,7 +108,7 @@ function ProductsList({ title, products }) {
     }
 
 
-    const clearProductFields = () =>{
+    const clearProductFields = () => {
         setSize("");
         setColor("");
         setQuantity(1);
@@ -122,7 +124,7 @@ function ProductsList({ title, products }) {
         setColors(product?.color);
         setVisible(true);
     }
-    
+
     return (
         <>
             <Toast ref={toastAlert} />
@@ -133,109 +135,110 @@ function ProductsList({ title, products }) {
                     </span>
                 </h1>
                 {
-                    products.length === 0 ? 
-                    <h2 className='h5 ml-4 text-muted'>Não foram encontrados nenhum produto no nosso banco de dados😢.</h2>
-                    :
-                    <div className="grid xl:px-5">
-                    {
-                        products?.map((product) => (
-                            <Card
-                                key={product.id}
-                                title={<Link to={`/products/detail/${product.slug}/`} className='text-dark'>{product.title} </Link>}
-                                subTitle={product.category?.title}
-                                className="sm:w-15 md:w-15rem lg:w-20rem xl:w-25rem text-center border-round m-4 p-5"
-                                header={<Image src={product.image} zoomSrc={product.image} alt={product.title} preview />}
-                            >
+                    products.length === 0 ?
+                        <h2 className='h5 ml-4 text-muted'>Não foram encontrados nenhum produto no nosso banco de dados😢.</h2>
+                        :
+                        <div className="grid justify-content-evently">
+                            {
+                                products?.map((product) => (
+                                    <div key={product.id} className='xl:col-3 lg:col-4 md:col-6 sm:col-12 col-12  '>
+                                        <Card
+                                            title={<Link to={`/products/detail/${product.slug}/`} className='text-dark'>{product.title} </Link>}
+                                            subTitle={product.category?.title}
+                                            className="sm:w-15 mx-4 md:w-20rem lg:w-20rem xl:w-20rem text-center border-round p-5"
+                                            header={<Image src={product.image} zoomSrc={product.image} alt={product.title} preview />}
+                                        >
 
-                                <div className="flex align-items-center justify-content-center mb-3">
-                                    <h5>{product.price}kz</h5>
-                                    <h6 className="text-muted ml-2"><del>{product.old_price}</del></h6>
-                                </div>
-
-                                <div className="text-center">
-                                    <Button
-                                        title="Adicionar ao Carrinho"
-                                        icon="pi pi-shopping-cart"
-                                        aria-label="Carrinho"
-                                        className='ml-1 btn-primary border-round'
-                                        onClick={(e) => showDetailProductDialog(e, product)}
-                                    />
-
-
-                                    <Link to={""} title="Adicionar aos favoritos">
-                                        <Button icon="pi pi-heart" aria-label="Carrinho" className='ml-1 btn-primary border-round' />
-                                    </Link>
-
-                                    <Link to={`/products/detail/${product.slug}/`} title="Ver Detalhes">
-                                        <Button icon="pi pi-search" aria-label="Detalhes" className='ml-1 btn-primary  border-round' />
-                                    </Link>
-
-                                    <div className="flex flex-wrap align-items-center justify-content-center my-3 ">
-                                        <span className="pi pi-star-fill my-text-primary mr-1"></span>
-                                        <span className="pi pi-star-fill my-text-primary mr-1"></span>
-                                        <span className="pi pi-star-fill my-text-primary mr-1"></span>
-                                        <span className="pi pi-star-fill my-text-primary mr-1"></span>
-                                        <span className="pi pi-star-fill my-text-primary mr-1"></span>
-                                        <span>(99)</span>
-                                    </div>
-
-
-                                </div>
-                            </Card>
-
-                        ))
-                    }
-
-
-
-                    <Dialog visible={visible} modal header={headerElement} footer={footerContent} style={{ width: '50rem' }} onHide={() => setVisible(false)}>
-                        <div className='p-5'>
-                            <div className='grid justify-content-between'>
-                                <div className="mb-3">
-                                    <strong className="text-dark mr-3">Tamanhos:</strong>
-                                    <span>{size}</span>
-                                    <div className='flex flex-wrap mt-3'>
-                                        {sizes?.map((size) => (
-                                            <div key={size.id} className="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" className="custom-control-input" id={`size-${size.id}`} name="size" value={size.name} onClick={(e) => setSize(e.target.value)} />
-                                                <label className="custom-control-label" htmlFor={`size-${size.id}`}>{size.name}</label>
+                                            <div className="flex align-items-center justify-content-center mb-3">
+                                                <h5>{product.price}kz</h5>
+                                                <h6 className="text-muted ml-2"><del>{product.old_price}</del></h6>
                                             </div>
-                                        ))
-                                        }
-                                    </div>
-                                </div>
+
+                                            <div className="text-center">
+                                                <Button
+                                                    title="Adicionar ao Carrinho"
+                                                    icon="pi pi-shopping-cart"
+                                                    aria-label="Carrinho"
+                                                    className='ml-1 btn-primary border-round'
+                                                    onClick={(e) => showDetailProductDialog(e, product)}
+                                                />
 
 
-                                <div className="mb-4">
-                                    <strong className="text-dark mr-3">Cor:</strong>
-                                    <span>{color}</span>
-                                    <div className='flex mt-3'>
-                                        {colors?.map((color, index) => (
-                                            <div key={color.id} className="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" className="custom-control-input" id={`color-${color.id}`} name="color" value={color.name} onClick={(e) => setColor(e.target.value)} />
-                                                <label className="custom-control-label" htmlFor={`color-${color.id}`}>{color.name}</label>
+                                                <Link to={""} title="Adicionar aos favoritos">
+                                                    <Button icon="pi pi-heart" aria-label="Carrinho" className='ml-1 btn-primary border-round' />
+                                                </Link>
+
+                                                <Link to={`/products/detail/${product.slug}/`} title="Ver Detalhes">
+                                                    <Button icon="pi pi-search" aria-label="Detalhes" className='ml-1 btn-primary  border-round' />
+                                                </Link>
+
+                                                <div className="flex flex-wrap align-items-center justify-content-center my-3 ">
+                                                    <span className="pi pi-star-fill my-text-primary mr-1"></span>
+                                                    <span className="pi pi-star-fill my-text-primary mr-1"></span>
+                                                    <span className="pi pi-star-fill my-text-primary mr-1"></span>
+                                                    <span className="pi pi-star-fill my-text-primary mr-1"></span>
+                                                    <span className="pi pi-star-fill my-text-primary mr-1"></span>
+                                                    <span>(99)</span>
+                                                </div>
+
+
                                             </div>
-                                        ))}
+                                        </Card>
+                                    </div>
+
+                                ))
+                            }
+
+
+
+                            <Dialog visible={visible} modal header={headerElement} footer={footerContent} style={{ width: '50rem' }} onHide={() => setVisible(false)}>
+                                <div className='p-5'>
+                                    <div className='grid justify-content-between'>
+                                        <div className="mb-3">
+                                            <strong className="text-dark mr-3">Tamanhos:</strong>
+                                            <span>{size}</span>
+                                            <div className='flex flex-wrap mt-3'>
+                                                {sizes?.map((size) => (
+                                                    <div key={size.id} className="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" className="custom-control-input" id={`size-${size.id}`} name="size" value={size.name} onClick={(e) => setSize(e.target.value)} />
+                                                        <label className="custom-control-label" htmlFor={`size-${size.id}`}>{size.name}</label>
+                                                    </div>
+                                                ))
+                                                }
+                                            </div>
+                                        </div>
+
+
+                                        <div className="mb-4">
+                                            <strong className="text-dark mr-3">Cor:</strong>
+                                            <span>{color}</span>
+                                            <div className='flex mt-3'>
+                                                {colors?.map((color, index) => (
+                                                    <div key={color.id} className="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" className="custom-control-input" id={`color-${color.id}`} name="color" value={color.name} onClick={(e) => setColor(e.target.value)} />
+                                                        <label className="custom-control-label" htmlFor={`color-${color.id}`}>{color.name}</label>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-5">
+                                        <strong className="text-dark mr-3">Quantidade:</strong>
+                                        <span>{quantity}</span>
+
+                                        <div className='flex mt-3'>
+                                            <div className="flex-auto">
+                                                <InputNumber inputId="stacked-buttons" value={quantity} onValueChange={(e) => setQuantity(e.value)} showButtons />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </Dialog>
 
-                            <div className="mt-5">
-                                <strong className="text-dark mr-3">Quantidade:</strong>
-                                <span>{quantity}</span>
-
-                                <div className='flex mt-3'>
-                                    <div className="flex-auto">
-                                        <InputNumber inputId="stacked-buttons" value={quantity} onValueChange={(e) => setQuantity(e.value)} showButtons />
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                    </Dialog>
-
-                </div>
                 }
-                
+
             </section>
         </>
     )

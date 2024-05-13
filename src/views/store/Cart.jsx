@@ -127,7 +127,8 @@ function Cart() {
             formData.append("color", color);
             formData.append("quantity", quantity);
 
-            formData.append("country", currentAddress?.country.toUpperCase());
+            // formData.append("country", currentAddress?.country.toUpperCase());
+            formData.append("country", country);
             formData.append("user_id", userData?.user_id);
             formData.append("cart_id", cartId);
 

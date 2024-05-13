@@ -64,7 +64,7 @@ function MyMenuBar() {
         { "label": "Home", "url": URL_ROUTES.ROOT, template: itemRenderer },
         { "label": "Novos Produtos", url: URL_ROUTES.NEW_PRODUCTS, template: itemRenderer },
         { "label": "Destaques", url: URL_ROUTES.HIGHLIGHTS, template: itemRenderer },
-        { "label": "Contactos", url: URL_ROUTES.CONTACTS, template: itemRenderer },
+        // { "label": "Contactos", url: URL_ROUTES.CONTACTS, template: itemRenderer },
         {
             "label": "Outras Secções", "items": [
                 { "label": 'Minha Conta', url: URL_ROUTES.CUSTOMER_ACCOUNT },
@@ -72,7 +72,7 @@ function MyMenuBar() {
                 { "label": 'Faqs', url: URL_ROUTES.FAQS }], template: itemRenderer
         },
         { "label": "Carrinho", icon: "pi pi-shopping-cart", url: URL_ROUTES.GO_TO_CART, badge: cartCount, template: itemRenderer },
-        { "label": "Favoritos", icon: "pi pi-heart", url: URL_ROUTES.WISHLIST, badge: 0, template: itemRenderer },
+        // { "label": "Favoritos", icon: "pi pi-heart", url: URL_ROUTES.WISHLIST, badge: 0, template: itemRenderer },
     ];
 
     const end = (
