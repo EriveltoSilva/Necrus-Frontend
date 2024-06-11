@@ -34,7 +34,7 @@ import ProductFromCategory from './views/store/ProductFromCategory';
 import NewProducts from "./views/store/NewProducts";
 
 // Customers Components
-import Account from "./views/custumer/Account";
+import Account from "./views/customer/Account";
 
 import Cart from "./views/store/Cart";
 import Checkout from "./views/store/Checkout";
@@ -43,9 +43,14 @@ import { CartContext } from "./views/plugin/Context";
 //  Libraries and assets imports
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "primereact/resources/primereact.min.css";
-import 'primeicons/primeicons.css';
-import 'primeflex/primeflex.css';
-import './App.css'
+import "primeicons/primeicons.css";
+import "primeflex/primeflex.css";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min"; 
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+import "./App.css";
 
 import { URL_ROUTES } from "./utils/constants";
 import apiInstance from './utils/axios';
