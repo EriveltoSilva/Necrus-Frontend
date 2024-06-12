@@ -1,36 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import ImageLogo from '../components/ImageLogo';
-import apiInstance from '../utils/axios';
 
-import { Button } from 'primereact/button';
-import { Dropdown } from 'primereact/dropdown';
 import { URL_ROUTES } from '../utils/constants';
-import { InputText } from 'primereact/inputtext';
 
 function Topbar() {
-    const navigate = useNavigate()
-
-    const menuOptions = [
-        { "title": "Inicio", "url": URL_ROUTES.ROOT },
-        { "title": "Login", "url": URL_ROUTES.LOGIN },
-        { "title": "Logout", "url": URL_ROUTES.LOGOUT },
-        { "title": "Registrar", "url": URL_ROUTES.REGISTER },
-    ]
+    const navigate = useNavigate();
 
     const [searchValue, setSearchValue] = useState("");
 
-    const [menuOption, setMenuOption] = useState(null);
-
-    useEffect(() => {
-        if (menuOption !== null)
-            navigate(menuOption.url);
-    }, [menuOption])
-
     const handleSearchForm = (e) => {
         e.preventDefault();
-        console.log("####################333");
         navigate(`/search?query=${searchValue}`);
     }
 
