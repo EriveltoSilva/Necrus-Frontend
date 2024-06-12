@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import ImagePayment from '../assets/img/payments.png'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import ImagePayment from '../assets/img/payments.png';
+
+import { Link } from 'react-router-dom';
+import { URL_ROUTES } from '../utils/constants';
 
 function Footer() {
   const [email, setEmail] = useState("")
@@ -8,7 +10,7 @@ function Footer() {
   const handleRegisterForm = (e) => {
     e.preventDefault();
     console.log(email);
-    alert("Email:"+email, " registado na newletter");
+    alert("Email:" + email, " registado na newsletter");
 
     // Função de registrar o email
   }
@@ -30,11 +32,11 @@ function Footer() {
               <div className="col-md-4 mb-5">
                 <h5 className="text-secondary text-uppercase mb-4">Compra rápida</h5>
                 <div className="d-flex flex-column justify-content-start">
-                  <Link className="text-secondary mb-2" to={"/"}><i className="bi bi-chevron-right mr-2"></i>Página Inicial</Link>
-                  <Link className="text-secondary mb-2" to={"/products"}><i className="bi bi-chevron-right mr-2"></i>Nosso shopping</Link>
-                  <Link className="text-secondary mb-2" to={"/cart"}><i className="bi bi-chevron-right mr-2"></i>Carrinho</Link>
-                  <Link className="text-secondary mb-2" to={"/checkout"}><i className="bi bi-chevron-right mr-2"></i>Checkout</Link>
-                  <Link className="text-secondary" to={"/contacts"}><i className="bi bi-chevron-right mr-2"></i>Contactos</Link>
+                  <Link className="text-secondary mb-2" to={URL_ROUTES.ROOT}><i className="bi bi-chevron-right mr-2"></i>Página Inicial</Link>
+                  <Link className="text-secondary mb-2" to={URL_ROUTES.PRODUCTS}><i className="bi bi-chevron-right mr-2"></i>Nosso shopping</Link>
+                  <Link className="text-secondary mb-2" to={URL_ROUTES.GO_TO_CART}><i className="bi bi-chevron-right mr-2"></i>Carrinho</Link>
+                  <Link className="text-secondary mb-2" to={URL_ROUTES.CHECKOUT}><i className="bi bi-chevron-right mr-2"></i>Checkout</Link>
+                  <Link className="text-secondary" to={URL_ROUTES.CONTACTS}><i className="bi bi-chevron-right mr-2"></i>Contactos</Link>
                 </div>
               </div>
               <div className="col-md-4 mb-5">
@@ -65,18 +67,18 @@ function Footer() {
         <div className="row border-top mx-xl-5 py-4" style={{ borderColor: "rgba(256, 256, 256, .1) !important" }}>
           <div className="col-md-6 px-xl-0">
             <p className="mb-md-0 text-center text-md-left text-secondary">
-              &copy; <Link to={"#"} className="text-primary">www.necrus.com</Link>. Todos os direitos reservados
+              &copy; <Link to={URL_ROUTES.ROOT} className="text-primary">www.necrus.com</Link>. Todos os direitos reservados
               por
-              <Link className="text-primary" to={"#"}>Necrus</Link>
+              <Link className="text-primary ml-1" to={URL_ROUTES.ROOT}>Necrus</Link>
             </p>
           </div>
           <div className="col-md-6 px-xl-0 text-center text-md-right">
-            <img classNameName="img-fluid" src={ImagePayment} alt="Metodos de Pagamento Necrus" />
+            <img classNameName="img-fluid" src={ImagePayment} alt="Métodos de Pagamento Necrus" />
           </div>
         </div>
+
       </div>
     </footer>
-
   )
 }
 
