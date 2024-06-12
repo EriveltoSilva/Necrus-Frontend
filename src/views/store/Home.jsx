@@ -51,23 +51,21 @@ function Home() {
     }, [])
 
 
-    const [backgroundColor, setBackgroundColor] = useState('#3DD9BC');
+    //const [backgroundColor, setBackgroundColor] = useState('#3DD9BC');
 
-    useEffect(() => {
+    /*useEffect(() => {
         const intervalId = setInterval(() => {
-            // Gerar uma cor aleatória hexadecimal
             const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
             setBackgroundColor(randomColor);
         }, 2500);
-        // Mudar a cor a cada 5 segundos
-
-        return () => clearInterval(intervalId); // Limpar o intervalo quando o componente desmontar
-    }, []); // Executar apenas uma vez, após a montagem do componente
+        return () => clearInterval(intervalId);
+    }, []);*/
 
 
     return (
         <>
-            <main style={{ backgroundColor }}>
+            {/* <main style={{ backgroundColor }}> */}
+            <main>
                 <Toast ref={toastAlert} />
                 <Banner />
                 <div className='p-5'>

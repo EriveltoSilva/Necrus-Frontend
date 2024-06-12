@@ -47,7 +47,7 @@ function Footer() {
                     <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} className="form-control" placeholder="Seu endereço de email" />
                     <div className="input-group-append">
                       <button type="submit" className="btn btn-primary">
-                        <i classNameName='bi bi-send mr-2'></i>
+                        <i className='bi bi-send mr-2'></i>
                         Registar
                       </button>
                     </div>
@@ -73,7 +73,7 @@ function Footer() {
             </p>
           </div>
           <div className="col-md-6 px-xl-0 text-center text-md-right">
-            <img classNameName="img-fluid" src={ImagePayment} alt="Métodos de Pagamento Necrus" />
+            <img className="img-fluid" src={ImagePayment} alt="Métodos de Pagamento Necrus" />
           </div>
         </div>
 

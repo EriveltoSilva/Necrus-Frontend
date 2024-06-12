@@ -15,7 +15,7 @@ import '../../assets/css/auth.css'
 
 function Login() {
   const [email, setEmail] = useState("eriveltoclenio@gmail.com")
-  const [password, setPassword] = useState("erivelto@123")
+  const [password, setPassword] = useState("erivelto@1234")
 
   const navigate = useNavigate()
   const toastAlert = useRef(null)

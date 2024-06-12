@@ -41,14 +41,24 @@ import Checkout from "./views/store/Checkout";
 import { CartContext } from "./views/plugin/Context";
 
 //  Libraries and assets imports
-import "primereact/resources/themes/lara-light-cyan/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
-import "primeflex/primeflex.css";
+// import "primereact/resources/themes/lara-light-cyan/theme.css";
+// import "primereact/resources/primereact.min.css";
+// import "primeicons/primeicons.css";
+// import "primeflex/primeflex.css";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min"; 
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import "bootstrap/dist/js/bootstrap.bundle"
+
+import "./assets/css/animate.min.css"
+import "./assets/css/owl.carousel.min.css"
+
+import "./assets/js/jquery-3.4.1.min.js";
+import "./assets/js/bootstrap.bundle.min.js";
+import "./assets/js/easing.min.js";
+import "./assets/js/owl.carousel.min.js";
+import "./assets/js/main.js";
 
 import "./App.css";
 
