@@ -11,7 +11,6 @@ function Banner() {
     useEffect(() => {
         apiInstance.get(`banner-images/`).then((resp) => {
             setImages(resp.data);
-            console.log(resp.data);
         }).catch((error) => console.error(error))
     }, []);
 
@@ -28,7 +27,6 @@ function Banner() {
 
             // Update the products state with the randomly selected products
             setProducts(randomProducts);
-            console.log(randomProducts);
         }).catch((error) => console.error(error))
     }, []);
 
@@ -73,7 +71,7 @@ function Banner() {
                     <div className="col-12 col-lg-4 d-none">
                         {
                             products?.map((product, index) => (
-                                <div key={index} className="product-offer mb-30" style={{ maxHeight: "200px;", minHeight: "200px;" }}>
+                                <div key={index} className="product-offer mb-30" style={{ maxHeight: "200px", minHeight: "200px" }}>
                                     <img className="img-fluid" src={product?.image} alt={product?.title} />
                                     <div className="offer-text">
                                         <h6 className="text-white text-uppercase"> Salve até {Math.round((product?.old_price-product?.price)*100/product?.price)}%</h6>

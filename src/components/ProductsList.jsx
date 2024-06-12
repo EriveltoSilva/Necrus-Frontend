@@ -7,12 +7,7 @@ import UserData from '../views/plugin/UserData';
 import GetCurrentAddress from '../views/plugin/UserCountry';
 import { CartContext } from '../views/plugin/Context';
 
-import { Card } from 'primereact/card';
-import { Image } from 'primereact/image';
 import { Toast } from 'primereact/toast';
-import { Button } from 'primereact/button';
-import { Dialog } from 'primereact/dialog';
-import { InputNumber } from 'primereact/inputnumber';
 
 
 function ProductsList({ title, products }) {
@@ -35,19 +30,6 @@ function ProductsList({ title, products }) {
     const [color, setColor] = useState("");
     const [quantity, setQuantity] = useState(1);
 
-
-    const headerElement = (
-        <div className="inline-flex align-items-center justify-content-center gap-2">
-            <span className="font-bold white-space-nowrap">Detalhes do Produto 🛒</span>
-        </div>
-    );
-
-    const footerContent = (
-        <div>
-            <Button label="Adicionar" icon="pi pi-shopping-cart" className='btn-primary border-round ' onClick={() => handlerAddtoCart()} autoFocus />
-        </div>
-    );
-
     const isFieldsValid = () => {
         if (!color) {
             toastAlert.current.show({ severity: 'error', summary: 'Formulario!', detail: "Escolha uma cor para o produto!" });
@@ -61,7 +43,7 @@ function ProductsList({ title, products }) {
     }
 
 
-    const handlerAddtoCart = async () => {
+    const handlerAddToCart = async () => {
         if (!isFieldsValid()) return;
         // console.log("Produto:", product);
         // console.log("-----------------------------------------------");
@@ -128,116 +110,127 @@ function ProductsList({ title, products }) {
     return (
         <>
             <Toast ref={toastAlert} />
-            <section className="w-full pt-5 pb-3">
-                <h1 className="section-title position-relative xl:mx-5 mb-4">
-                    <span className=" pr-3">
+
+            <section className="container-fluid pt-5 pb-3">
+                <h1 className="section-title position-relative text-uppercase mx-xl-5 mb-4">
+                    <span className="bg-secondary pr-3">
                         {title}
                     </span>
                 </h1>
-                {
-                    products.length === 0 ?
-                        <h2 className='h5 ml-4 text-muted'>Não foram encontrados nenhum produto no nosso banco de dados😢.</h2>
-                        :
-                        <div className="grid justify-content-evently">
-                            {
-                                products?.map((product) => (
-                                    <div key={product.id} className='xl:col-3 lg:col-4 md:col-6 sm:col-12 col-12  '>
-                                        <Card
-                                            title={<Link to={`/products/detail/${product.slug}/`} className='text-dark'>{product.title} </Link>}
-                                            subTitle={product.category?.title}
-                                            className="sm:w-15 mx-4 md:w-20rem lg:w-20rem xl:w-20rem text-center border-round p-5"
-                                            header={<Image src={product.image} zoomSrc={product.image} alt={product.title} preview />}
-                                        >
-
-                                            <div className="flex align-items-center justify-content-center mb-3">
-                                                <h5>{product.price}kz</h5>
-                                                <h6 className="text-muted ml-2"><del>{product.old_price}</del></h6>
-                                            </div>
-
-                                            <div className="text-center">
-                                                <Button
-                                                    title="Adicionar ao Carrinho"
-                                                    icon="pi pi-shopping-cart"
-                                                    aria-label="Carrinho"
-                                                    className='ml-1 btn-primary border-round'
-                                                    onClick={(e) => showDetailProductDialog(e, product)}
-                                                />
-
-
-                                                <Link to={""} title="Adicionar aos favoritos">
-                                                    <Button icon="pi pi-heart" aria-label="Carrinho" className='ml-1 btn-primary border-round' />
-                                                </Link>
-
-                                                <Link to={`/products/detail/${product.slug}/`} title="Ver Detalhes">
-                                                    <Button icon="pi pi-search" aria-label="Detalhes" className='ml-1 btn-primary  border-round' />
-                                                </Link>
-
-                                                <div className="flex flex-wrap align-items-center justify-content-center my-3 ">
-                                                    <span className="pi pi-star-fill my-text-primary mr-1"></span>
-                                                    <span className="pi pi-star-fill my-text-primary mr-1"></span>
-                                                    <span className="pi pi-star-fill my-text-primary mr-1"></span>
-                                                    <span className="pi pi-star-fill my-text-primary mr-1"></span>
-                                                    <span className="pi pi-star-fill my-text-primary mr-1"></span>
-                                                    <span>(99)</span>
+                <div className="row px-xl-5">
+                    {
+                        products.length === 0 ?
+                            <h2 className='h5 ml-4 text-muted'>Não foram encontrados nenhum produto no nosso banco de dados😢.</h2>
+                            :
+                            <>
+                                {products?.map((product, index) => (
+                                    <div key={index} className="col-lg-3 col-md-4 col-sm-6 pb-1" >
+                                        <div className="product-item bg-light mb-4">
+                                            <div className="product-img position-relative overflow-hidden">
+                                                <img className="img-fluid w-100" src={product?.image} alt={`Necrus - producto ${product?.title}`} style={{height:"275px"}} />
+                                                <div className="product-action">
+                                                    <button onClick={(e) => showDetailProductDialog(e, product)} className="btn btn-outline-dark btn-square" title="Adicionar ao Carrinho" data-toggle="modal" data-target={"#exampleModal" + index}>
+                                                        <i className="bi bi-cart-fill"></i>
+                                                    </button>
+                                                    {/* <Link to={""} className="btn btn-outline-dark btn-square" title="Adicionar aos favoritos">
+                                                        <i className="bi bi-heart-fill"></i>
+                                                    </Link> */}
+                                                    <Link to={`/products/detail/${product.slug}/`} className="btn btn-outline-dark btn-square" title="Ver Detalhes">
+                                                        <i className="bi bi-search"></i>
+                                                    </Link>
                                                 </div>
-
-
                                             </div>
-                                        </Card>
-                                    </div>
+                                            <div className="text-center py-4">
+                                                <div className='d-flex justify-center-right text-right'>
+                                                    <span className='badge badge-primary'>{product.category?.title}</span>
+                                                </div>
+                                                <Link to={`/products/detail/${product.slug}/`} className="h6 text-decoration-none text-truncate">
+                                                    {product?.title}
+                                                </Link>
+                                                <div className="d-flex align-items-center justify-content-center mt-2">
+                                                    <h5>{product?.price}kz</h5> <h6 className='ml-2'><del>{product?.old_price}kz</del></h6>
+                                                    <h6 className="text-muted ml-2"><del></del></h6>
+                                                </div>
+                                                <div className="d-flex align-items-center justify-content-center mb-1">
+                                                    <small className="bi bi-star-fill text-primary mr-1"></small>
+                                                    <small className="bi bi-star-fill text-primary mr-1"></small>
+                                                    <small className="bi bi-star-fill text-primary mr-1"></small>
+                                                    <small className="bi bi-star-fill text-primary mr-1"></small>
+                                                    <small className="bi bi-star-fill text-primary mr-1"></small>
+                                                    <small>(99)</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="modal fade" id={`exampleModal${index}`} tabIndex="-1" role="dialog" aria-labelledby={`exampleModalLabel${index}`} aria-hidden="true">
+                                            <div className="modal-dialog" role="document">
+                                                <div className="modal-content">
+                                                    <div className="modal-header">
+                                                        <h5 className="modal-title" id={`exampleModalLabel${index}`}>Detalhes do Produto 🛒{product?.title}</h5>
+                                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div className="modal-body">
+                                                        <div className='p-5'>
+                                                            <div className='row justify-content-between'>
+                                                                <div className="mb-3">
+                                                                    <strong className="text-dark mr-3">Tamanhos:</strong>
+                                                                    <span>{size}</span>
+                                                                    <div className='d-flex mt-3'>
+                                                                        {sizes?.map((size) => (
+                                                                            <div key={size.id} className="custom-control custom-radio">
+                                                                                <input type="radio" className="custom-control-input" id={`size-${size.id}`} name="size" value={size.name} onClick={(e) => setSize(e.target.value)} />
+                                                                                <label className="custom-control-label" htmlFor={`size-${size.id}`}>{size.name}</label>
+                                                                            </div>
+                                                                        ))
+                                                                        }
+                                                                    </div>
+                                                                </div>
 
+
+                                                                <div className="mb-4">
+                                                                    <strong className="text-dark mr-3">Cor:</strong>
+                                                                    <span>{color}</span>
+                                                                    <div className='d-flex mt-3'>
+                                                                        {colors?.map((color, index) => (
+                                                                            <div key={color.id} className="custom-control custom-radio custom-control-inline">
+                                                                                <input type="radio" className="custom-control-input" id={`color-${color.id}`} name="color" value={color.name} onClick={(e) => { setColor(e.target.value) }} />
+                                                                                <label className="custom-control-label" htmlFor={`color-${color.id}`}>{color.name}</label>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="mt-5">
+                                                                <strong className="text-dark mr-3">Quantidade:</strong>
+                                                                <span>{quantity}</span>
+
+                                                                <div className='d-flex mt-3'>
+                                                                    <div className="form-group">
+                                                                        <input type='number' min={1} value={quantity} onChange={(e) => setQuantity(e.value)} className='form-control' />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="modal-footer">
+                                                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                                        <button type="button" onClick={handlerAddToCart} className="btn btn-primary">
+                                                            <i className='bi bi-cart-fill'></i>
+                                                            Adicionar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 ))
-                            }
+                                }
+                            </>
+                    }
 
-
-
-                            <Dialog visible={visible} modal header={headerElement} footer={footerContent} style={{ width: '50rem' }} onHide={() => setVisible(false)}>
-                                <div className='p-5'>
-                                    <div className='grid justify-content-between'>
-                                        <div className="mb-3">
-                                            <strong className="text-dark mr-3">Tamanhos:</strong>
-                                            <span>{size}</span>
-                                            <div className='flex flex-wrap mt-3'>
-                                                {sizes?.map((size) => (
-                                                    <div key={size.id} className="custom-control custom-radio custom-control-inline">
-                                                        <input type="radio" className="custom-control-input" id={`size-${size.id}`} name="size" value={size.name} onClick={(e) => setSize(e.target.value)} />
-                                                        <label className="custom-control-label" htmlFor={`size-${size.id}`}>{size.name}</label>
-                                                    </div>
-                                                ))
-                                                }
-                                            </div>
-                                        </div>
-
-
-                                        <div className="mb-4">
-                                            <strong className="text-dark mr-3">Cor:</strong>
-                                            <span>{color}</span>
-                                            <div className='flex mt-3'>
-                                                {colors?.map((color, index) => (
-                                                    <div key={color.id} className="custom-control custom-radio custom-control-inline">
-                                                        <input type="radio" className="custom-control-input" id={`color-${color.id}`} name="color" value={color.name} onClick={(e) => setColor(e.target.value)} />
-                                                        <label className="custom-control-label" htmlFor={`color-${color.id}`}>{color.name}</label>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-5">
-                                        <strong className="text-dark mr-3">Quantidade:</strong>
-                                        <span>{quantity}</span>
-
-                                        <div className='flex mt-3'>
-                                            <div className="flex-auto">
-                                                <InputNumber inputId="stacked-buttons" value={quantity} onValueChange={(e) => setQuantity(e.value)} showButtons />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Dialog>
-
-                        </div>
-                }
+                </div>
 
             </section>
         </>
