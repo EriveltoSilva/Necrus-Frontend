@@ -165,7 +165,7 @@ function ProductDetail() {
         }
     }
 
-    console.log(product);
+    //console.log(product);
 
     return (
         <>
@@ -215,7 +215,7 @@ function ProductDetail() {
                                     <small className="bi bi-star-half-alt"></small>
                                     <small className="bi bi-star"></small>
                                 </div>
-                                <small className="pt-1">(99 Reviews)</small>
+                                <small className="pt-1">({reviews.length} avaliações)</small>
                             </div>
                             <h3 className="font-weight-semi-bold mb-4">{product?.price}Kz</h3>
                             <p className="mb-4">
