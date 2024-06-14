@@ -126,14 +126,16 @@ function MyMenuBar() {
                                     <Link to={URL_ROUTES.WISHLIST} className="btn px-0">
                                         <i className="bi bi-heart-fill text-primary"></i>
                                         <span className="badge text-secondary border border-secondary rounded-circle" style={{ paddingBottom: "2px" }}>
-                                            {cartCount}
+                                            0
                                         </span>
                                     </Link>
 
-                                    {/* <Link to={URL_ROUTES.GO_TO_CART} className="btn px-0 ml-3">
+                                     <Link to={URL_ROUTES.GO_TO_CART} className="btn px-0 ml-3">
                                         <i className="bi bi-cart-fill text-primary"></i>
-                                        <span className="badge text-secondary border border-secondary rounded-circle" style={{ paddingBottom: "2px" }}>0</span>
-                                    </Link> */}
+                                        <span className="badge text-secondary border border-secondary rounded-circle" style={{ paddingBottom: "2px" }}>
+                                        {cartCount}
+                                        </span>
+                                    </Link>
                                 </div>
                             </div>
                         </nav>
