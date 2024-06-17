@@ -185,22 +185,26 @@ function ProductDetail() {
             <div className="container-fluid pb-5">
                 <div className="row px-xl-5">
                     <div className="col-lg-5 mb-30">
-                        <div id="product-carousel" className="carousel slide" data-ride="carousel">
-                            <div className="carousel-inner bg-light">
+                    <div id="header-carousel" className="carousel slide carousel-fade mb-30 mb-lg-0" data-ride="carousel">
+                            <ol className="carousel-indicators">
+                                {galleryImages?.map((image, index) => (
+                                    <li
+                                        key={index}
+                                        data-target="#header-carousel"
+                                        data-slide-to={index}
+                                        className={index === 0 ? "active" : ""}
+                                    ></li>
+                                ))}
+                            </ol>
+                            <div className="carousel-inner">
                                 {
                                     galleryImages?.map((image, index) => (
-                                        <div key={index} className={index == 0 ? "carousel-item active" : "carousel-item"}>
-                                            <img className="w-100 h-100" src={image.image} alt={`Producto ${image.gid}`} />
+                                        <div key={index} className={index === 0 ? "carousel-item position-relative active" : "carousel-item position-relative"} style={{ height: "530px" }}>
+                                            <img className="position-absolute w-100 h-100" src={image.image} style={{ objectFit: "cover" }} />
                                         </div>
                                     ))
                                 }
                             </div>
-                            <Link className="carousel-control-prev" href="#product-carousel" data-slide="prev">
-                                <i className="fa fa-2x fa-angle-left text-dark"></i>
-                            </Link>
-                            <Link className="carousel-control-next" href="#product-carousel" data-slide="next">
-                                <i className="fa fa-2x fa-angle-right text-dark"></i>
-                            </Link>
                         </div>
                     </div>
 
